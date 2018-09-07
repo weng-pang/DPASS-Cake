@@ -197,3 +197,33 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+
+/*
+ * Plugin support section
+ *
+ *
+ *
+ */
+Plugin::load('AdminLTE', ['bootstrap' => true, 'routes' => true]);
+
+/*
+ * AdminLTE Setting
+ * This is moved to AppController.php
+ */
+
+Configure::write('Theme', [
+    'title' => 'AdminLTE',
+    'logo' => [
+        'mini' => '<b>DPass</b>',
+        'large' => '<b>D</b>Pass'
+    ],
+    'login' => [
+        'show_remember' => true,
+        'show_register' => true,
+        'show_social' => true
+    ],
+    'folder' => ROOT,
+    'skin' => 'green' // blue-light, yellow, yellow-light, green, green-light, purple, purple-light, red, red-light, black, black-light
+
+]);

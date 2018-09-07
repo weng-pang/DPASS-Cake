@@ -6,11 +6,11 @@
     "license": "MIT",
     "require": {
         "php": ">=5.6",
-        "almasaeed2010/adminlte": "^2.4",
         "cakephp/cakephp": "3.6.*",
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
         "josegonzalez/dotenv": "3.*",
+        "maiconpinto/cakephp-adminlte-theme": "^1.0",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
