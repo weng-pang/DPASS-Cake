@@ -197,3 +197,9 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+/*
+ * Allowing the DebugKit to run on shared hosting environment.
+ *
+ */
+Configure::write('DebugKit.forceEnable', true);
