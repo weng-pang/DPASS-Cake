@@ -4,16 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Log Entity
+ * Photo Entity
  *
- * @property int $serial
- * @property string $key
- * @property string $ip
- * @property string $description
- * @property \Cake\I18n\FrozenTime $time
- * @property string $type
+ * @property int $photo_id
+ * @property int $score_id
+ * @property string $photo_path
+ * @property string $metadata
+ * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
+ *
+ * @property \App\Model\Entity\Score $score
  */
-class Log extends Entity
+class Photo extends Entity
 {
 
     /**
@@ -26,10 +28,11 @@ class Log extends Entity
      * @var array
      */
     protected $_accessible = [
-        'key' => true,
-        'ip' => true,
-        'description' => true,
-        'time' => true,
-        'type' => true
+        'score_id' => true,
+        'photo_path' => true,
+        'metadata' => true,
+        'create_time' => true,
+        'update_time' => true,
+        'score' => true
     ];
 }

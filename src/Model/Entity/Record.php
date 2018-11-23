@@ -6,16 +6,19 @@ use Cake\ORM\Entity;
 /**
  * Record Entity
  *
- * @property int $serial
- * @property int $id
- * @property \Cake\I18n\FrozenTime $datetime
- * @property int $machineid
- * @property int $entryid
- * @property string $ipaddress
- * @property int $portnumber
- * @property \Cake\I18n\FrozenTime $update
- * @property string $key
- * @property bool $revoked
+ * @property int $record_id
+ * @property int $staff_id
+ * @property float $longtitude
+ * @property float $latitude
+ * @property float $accuracy
+ * @property \Cake\I18n\FrozenTime $time
+ * @property string $additional_data
+ * @property string $http_user_agent
+ * @property string $http_cf_ray
+ * @property string $http_cf_connecting_ip
+ * @property string $http_cookie
+ * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
  */
 class Record extends Entity
 {
@@ -30,14 +33,17 @@ class Record extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id' => true,
-        'datetime' => true,
-        'machineid' => true,
-        'entryid' => true,
-        'ipaddress' => true,
-        'portnumber' => true,
-        'update' => true,
-        'key' => true,
-        'revoked' => true
+        'staff_id' => true,
+        'longtitude' => true,
+        'latitude' => true,
+        'accuracy' => true,
+        'time' => true,
+        'additional_data' => true,
+        'http_user_agent' => true,
+        'http_cf_ray' => true,
+        'http_cf_connecting_ip' => true,
+        'http_cookie' => true,
+        'create_time' => true,
+        'update_time' => true
     ];
 }

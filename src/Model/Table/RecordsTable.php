@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Records Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Staff
+ *
  * @method \App\Model\Entity\Record get($primaryKey, $options = [])
  * @method \App\Model\Entity\Record newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Record[] newEntities(array $data, array $options = [])
@@ -34,6 +36,10 @@ class RecordsTable extends Table
         $this->setTable('records');
         $this->setDisplayField('serial');
         $this->setPrimaryKey('serial');
+
+        $this->belongsTo('Staff', [
+            'foreignKey' => 'staff_id'
+        ]);
     }
 
     /**
@@ -45,52 +51,72 @@ class RecordsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('serial')
-            ->allowEmpty('serial', 'create');
+            ->integer('record_id')
+            ->allowEmpty('record_id', 'create');
 
         $validator
-            ->requirePresence('id', 'create')
-            ->notEmpty('id');
+            ->decimal('longtitude')
+            ->allowEmpty('longtitude');
 
         $validator
-            ->dateTime('datetime')
-            ->requirePresence('datetime', 'create')
-            ->notEmpty('datetime');
+            ->decimal('latitude')
+            ->allowEmpty('latitude');
 
         $validator
-            ->requirePresence('machineid', 'create')
-            ->notEmpty('machineid');
+            ->decimal('accuracy')
+            ->allowEmpty('accuracy');
 
         $validator
-            ->requirePresence('entryid', 'create')
-            ->notEmpty('entryid');
+            ->dateTime('time')
+            ->allowEmpty('time');
 
         $validator
-            ->scalar('ipaddress')
-            ->maxLength('ipaddress', 15)
-            ->requirePresence('ipaddress', 'create')
-            ->notEmpty('ipaddress');
+            ->scalar('additional_data')
+            ->maxLength('additional_data', 1000)
+            ->allowEmpty('additional_data');
 
         $validator
-            ->requirePresence('portnumber', 'create')
-            ->notEmpty('portnumber');
+            ->scalar('http_user_agent')
+            ->maxLength('http_user_agent', 200)
+            ->allowEmpty('http_user_agent');
 
         $validator
-            ->dateTime('update')
-            ->requirePresence('update', 'create')
-            ->notEmpty('update');
+            ->scalar('http_cf_ray')
+            ->maxLength('http_cf_ray', 100)
+            ->allowEmpty('http_cf_ray');
 
         $validator
-            ->scalar('key')
-            ->maxLength('key', 64)
-            ->requirePresence('key', 'create')
-            ->notEmpty('key');
+            ->scalar('http_cf_connecting_ip')
+            ->maxLength('http_cf_connecting_ip', 45)
+            ->allowEmpty('http_cf_connecting_ip');
 
         $validator
-            ->boolean('revoked')
-            ->requirePresence('revoked', 'create')
-            ->notEmpty('revoked');
+            ->scalar('http_cookie')
+            ->maxLength('http_cookie', 1000)
+            ->allowEmpty('http_cookie');
+
+        $validator
+            ->dateTime('create_time')
+            ->allowEmpty('create_time');
+
+        $validator
+            ->dateTime('update_time')
+            ->allowEmpty('update_time');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['staff_id'], 'Staff'));
+
+        return $rules;
     }
 }

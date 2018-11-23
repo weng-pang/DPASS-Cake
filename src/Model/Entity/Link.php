@@ -4,17 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * RecordApproval Entity
+ * Link Entity
  *
- * @property int $serial
- * @property int $record_serial
- * @property int $id
- * @property int $power
- * @property \Cake\I18n\FrozenTime $datetime
- * @property bool $revoked
- * @property \Cake\I18n\FrozenTime $update
+ * @property int $link_id
+ * @property int $staff_id
+ * @property string $link
+ * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
+ *
+ * @property \App\Model\Entity\Staff $staff
  */
-class RecordApproval extends Entity
+class Link extends Entity
 {
 
     /**
@@ -27,11 +27,10 @@ class RecordApproval extends Entity
      * @var array
      */
     protected $_accessible = [
-        'record_serial' => true,
-        'id' => true,
-        'power' => true,
-        'datetime' => true,
-        'revoked' => true,
-        'update' => true
+        'staff_id' => true,
+        'link' => true,
+        'create_time' => true,
+        'update_time' => true,
+        'staff' => true
     ];
 }

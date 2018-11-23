@@ -4,15 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * ApiKey Entity
+ * Manager Entity
  *
- * @property string $key
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $expire
- * @property bool $revoked
- * @property string $comment
+ * @property int $manager_id
+ * @property string $surname
+ * @property string $given_names
+ * @property int $default_score
+ * @property int $status
+ * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
  */
-class ApiKey extends Entity
+class Manager extends Entity
 {
 
     /**
@@ -25,9 +27,11 @@ class ApiKey extends Entity
      * @var array
      */
     protected $_accessible = [
-        'created' => true,
-        'expire' => true,
-        'revoked' => true,
-        'comment' => true
+        'surname' => true,
+        'given_names' => true,
+        'default_score' => true,
+        'status' => true,
+        'create_time' => true,
+        'update_time' => true
     ];
 }

@@ -17,18 +17,25 @@ class RecordsFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'serial' => ['type' => 'integer', 'length' => 10, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'id' => ['type' => 'smallinteger', 'length' => 5, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'datetime' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'machineid' => ['type' => 'smallinteger', 'length' => 5, 'unsigned' => true, 'null' => false, 'default' => '999', 'comment' => '', 'precision' => null],
-        'entryid' => ['type' => 'tinyinteger', 'length' => 3, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'ipaddress' => ['type' => 'string', 'length' => 15, 'null' => false, 'default' => '0.0.0.0', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'portnumber' => ['type' => 'smallinteger', 'length' => 5, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'update' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'key' => ['type' => 'string', 'length' => 64, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'revoked' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
+        'record_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'staff_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'longtitude' => ['type' => 'decimal', 'length' => 10, 'precision' => 5, 'unsigned' => false, 'null' => true, 'default' => '1000.00000', 'comment' => ''],
+        'latitude' => ['type' => 'decimal', 'length' => 10, 'precision' => 5, 'unsigned' => false, 'null' => true, 'default' => '1000.00000', 'comment' => ''],
+        'accuracy' => ['type' => 'decimal', 'length' => 10, 'precision' => 5, 'unsigned' => false, 'null' => true, 'default' => '0.00000', 'comment' => ''],
+        'time' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'additional_data' => ['type' => 'string', 'length' => 1000, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'http_user_agent' => ['type' => 'string', 'length' => 200, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'http_cf_ray' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'http_cf_connecting_ip' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'http_cookie' => ['type' => 'string', 'length' => 1000, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'create_time' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'update_time' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        '_indexes' => [
+            'staff_id_fk_idx' => ['type' => 'index', 'columns' => ['staff_id'], 'length' => []],
+        ],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['serial'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['record_id'], 'length' => []],
+            'records_staff_id_fk' => ['type' => 'foreign', 'columns' => ['staff_id'], 'references' => ['staff', 'staff_id'], 'update' => 'cascade', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -46,16 +53,19 @@ class RecordsFixture extends TestFixture
     {
         $this->records = [
             [
-                'serial' => 1,
-                'id' => 1,
-                'datetime' => '2018-08-20 01:03:48',
-                'machineid' => 1,
-                'entryid' => 1,
-                'ipaddress' => 'Lorem ipsum d',
-                'portnumber' => 1,
-                'update' => '2018-08-20 01:03:48',
-                'key' => 'Lorem ipsum dolor sit amet',
-                'revoked' => 1
+                'record_id' => 1,
+                'staff_id' => 1,
+                'longtitude' => 1.5,
+                'latitude' => 1.5,
+                'accuracy' => 1.5,
+                'time' => '2018-11-23 09:29:13',
+                'additional_data' => 'Lorem ipsum dolor sit amet',
+                'http_user_agent' => 'Lorem ipsum dolor sit amet',
+                'http_cf_ray' => 'Lorem ipsum dolor sit amet',
+                'http_cf_connecting_ip' => 'Lorem ipsum dolor sit amet',
+                'http_cookie' => 'Lorem ipsum dolor sit amet',
+                'create_time' => '2018-11-23 09:29:13',
+                'update_time' => '2018-11-23 09:29:13'
             ],
         ];
         parent::init();

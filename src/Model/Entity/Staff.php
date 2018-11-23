@@ -6,15 +6,16 @@ use Cake\ORM\Entity;
 /**
  * Staff Entity
  *
- * @property int $id
- * @property string $name
- * @property string $name2
- * @property \Cake\I18n\FrozenTime $checkin
- * @property \Cake\I18n\FrozenTime $checkout
- * @property int $lunch
- * @property int $overtime
- * @property int $repeatedrange
- * @property int $overtimeapproval
+ * @property int $staff_id
+ * @property string $surname
+ * @property string $given_names
+ * @property \Cake\I18n\FrozenTime $start_time
+ * @property \Cake\I18n\FrozenTime $end_time
+ * @property float $monthly_wage
+ * @property float $hourly_wage
+ * @property int $status
+ * @property \Cake\I18n\FrozenTime $update_time
+ * @property \Cake\I18n\FrozenTime $create_time
  */
 class Staff extends Entity
 {
@@ -29,13 +30,14 @@ class Staff extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'name2' => true,
-        'checkin' => true,
-        'checkout' => true,
-        'lunch' => true,
-        'overtime' => true,
-        'repeatedrange' => true,
-        'overtimeapproval' => true
+        'surname' => true,
+        'given_names' => true,
+        'start_time' => true,
+        'end_time' => true,
+        'monthly_wage' => true,
+        'hourly_wage' => true,
+        'status' => true,
+        'update_time' => true,
+        'create_time' => true
     ];
 }
