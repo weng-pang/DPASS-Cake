@@ -17,44 +17,56 @@
     <h3><?= h($record->serial) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('Ipaddress') ?></th>
-            <td><?= h($record->ipaddress) ?></td>
+            <th scope="row"><?= __('Additional Data') ?></th>
+            <td><?= h($record->additional_data) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Key') ?></th>
-            <td><?= h($record->key) ?></td>
+            <th scope="row"><?= __('Http User Agent') ?></th>
+            <td><?= h($record->http_user_agent) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Serial') ?></th>
-            <td><?= $this->Number->format($record->serial) ?></td>
+            <th scope="row"><?= __('Http Cf Ray') ?></th>
+            <td><?= h($record->http_cf_ray) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($record->id) ?></td>
+            <th scope="row"><?= __('Http Cf Connecting Ip') ?></th>
+            <td><?= h($record->http_cf_connecting_ip) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Machineid') ?></th>
-            <td><?= $this->Number->format($record->machineid) ?></td>
+            <th scope="row"><?= __('Http Cookie') ?></th>
+            <td><?= h($record->http_cookie) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Entryid') ?></th>
-            <td><?= $this->Number->format($record->entryid) ?></td>
+            <th scope="row"><?= __('Record Id') ?></th>
+            <td><?= $this->Number->format($record->record_id) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Portnumber') ?></th>
-            <td><?= $this->Number->format($record->portnumber) ?></td>
+            <th scope="row"><?= __('Staff Id') ?></th>
+            <td><?= $this->Number->format($record->staff_id) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Datetime') ?></th>
-            <td><?= h($record->datetime) ?></td>
+            <th scope="row"><?= __('Longtitude') ?></th>
+            <td><?= $this->Number->format($record->longtitude) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Update') ?></th>
-            <td><?= h($record->update) ?></td>
+            <th scope="row"><?= __('Latitude') ?></th>
+            <td><?= $this->Number->format($record->latitude) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Revoked') ?></th>
-            <td><?= $record->revoked ? __('Yes') : __('No'); ?></td>
+            <th scope="row"><?= __('Accuracy') ?></th>
+            <td><?= $this->Number->format($record->accuracy) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Time') ?></th>
+            <td><?= h($record->time) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Create Time') ?></th>
+            <td><?= h($record->create_time) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Update Time') ?></th>
+            <td><?= h($record->update_time) ?></td>
         </tr>
     </table>
 </div>

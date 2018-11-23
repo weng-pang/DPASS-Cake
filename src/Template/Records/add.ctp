@@ -15,15 +15,19 @@
     <fieldset>
         <legend><?= __('Add Record') ?></legend>
         <?php
-            echo $this->Form->control('id');
-            echo $this->Form->control('datetime');
-            echo $this->Form->control('machineid');
-            echo $this->Form->control('entryid');
-            echo $this->Form->control('ipaddress');
-            echo $this->Form->control('portnumber');
-            echo $this->Form->control('update');
-            echo $this->Form->control('key');
-            echo $this->Form->control('revoked');
+            echo $this->Form->control('record_id');
+            echo $this->Form->control('staff_id');
+            echo $this->Form->control('longtitude');
+            echo $this->Form->control('latitude');
+            echo $this->Form->control('accuracy');
+            echo $this->Form->control('time', ['empty' => true]);
+            echo $this->Form->control('additional_data');
+            echo $this->Form->control('http_user_agent');
+            echo $this->Form->control('http_cf_ray');
+            echo $this->Form->control('http_cf_connecting_ip');
+            echo $this->Form->control('http_cookie');
+            echo $this->Form->control('create_time', ['empty' => true]);
+            echo $this->Form->control('update_time', ['empty' => true]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

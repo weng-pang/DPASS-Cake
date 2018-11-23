@@ -4,20 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Staff Entity
+ * Manager Entity
  *
- * @property int $staff_id
+ * @property int $manager_id
  * @property string $surname
  * @property string $given_names
- * @property \Cake\I18n\FrozenTime $start_time
- * @property \Cake\I18n\FrozenTime $end_time
- * @property float $monthly_wage
- * @property float $hourly_wage
+ * @property int $default_score
  * @property int $status
- * @property \Cake\I18n\FrozenTime $update_time
  * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
  */
-class Staff extends Entity
+class Manager extends Entity
 {
 
     /**
@@ -32,12 +29,9 @@ class Staff extends Entity
     protected $_accessible = [
         'surname' => true,
         'given_names' => true,
-        'start_time' => true,
-        'end_time' => true,
-        'monthly_wage' => true,
-        'hourly_wage' => true,
+        'default_score' => true,
         'status' => true,
-        'update_time' => true,
-        'create_time' => true
+        'create_time' => true,
+        'update_time' => true
     ];
 }

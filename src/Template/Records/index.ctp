@@ -15,32 +15,38 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('serial') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('datetime') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('machineid') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('entryid') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('ipaddress') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('portnumber') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('update') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('key') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('revoked') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('record_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('staff_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('longtitude') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('latitude') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('accuracy') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('time') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('additional_data') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('http_user_agent') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('http_cf_ray') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('http_cf_connecting_ip') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('http_cookie') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('create_time') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('update_time') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($records as $record): ?>
             <tr>
-                <td><?= $this->Number->format($record->serial) ?></td>
-                <td><?= $this->Number->format($record->id) ?></td>
-                <td><?= h($record->datetime) ?></td>
-                <td><?= $this->Number->format($record->machineid) ?></td>
-                <td><?= $this->Number->format($record->entryid) ?></td>
-                <td><?= h($record->ipaddress) ?></td>
-                <td><?= $this->Number->format($record->portnumber) ?></td>
-                <td><?= h($record->update) ?></td>
-                <td><?= h($record->key) ?></td>
-                <td><?= h($record->revoked) ?></td>
+                <td><?= $this->Number->format($record->record_id) ?></td>
+                <td><?= $this->Number->format($record->staff_id) ?></td>
+                <td><?= $this->Number->format($record->longtitude) ?></td>
+                <td><?= $this->Number->format($record->latitude) ?></td>
+                <td><?= $this->Number->format($record->accuracy) ?></td>
+                <td><?= h($record->time) ?></td>
+                <td><?= h($record->additional_data) ?></td>
+                <td><?= h($record->http_user_agent) ?></td>
+                <td><?= h($record->http_cf_ray) ?></td>
+                <td><?= h($record->http_cf_connecting_ip) ?></td>
+                <td><?= h($record->http_cookie) ?></td>
+                <td><?= h($record->create_time) ?></td>
+                <td><?= h($record->update_time) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $record->serial]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $record->serial]) ?>
