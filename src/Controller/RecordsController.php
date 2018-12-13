@@ -70,7 +70,7 @@ class RecordsController extends AppController
     public function staffadd($code = null, $language = null){
         // Configure the language
         // Fetching the link access code and staff profile
-        $staff = $this->Records->Staff->Links
+        $link = $this->Records->Staff->Links
             ->find('all',['contain'=>'Staff'])
             ->where(['link' => $code])
             ->firstOrFail();
@@ -78,7 +78,7 @@ class RecordsController extends AppController
         // Fetching the latest 5 attendance records
         $records = $this->Records
             ->find('all')
-            ->where(['staff_id'=> $staff->staff_id])
+            ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
             ->limit(5);
 //        foreach($records as $record){
@@ -92,10 +92,11 @@ class RecordsController extends AppController
             // Get Environment Variables
         }
         $record = $this->Records->newEntity();
+        $record->staff_id = $link->staff_id;
         // sending the data to view layer
-        $this->set('staff',($staff));
+        $this->set('link',($link));
         $this->set('records',($records));
-        $this->set('record');
+        $this->set('record',$record);
 
     }
 

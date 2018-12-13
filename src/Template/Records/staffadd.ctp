@@ -13,24 +13,46 @@
 <div class="records form large-9 medium-8 columns content">
 
     <?= $this->Form->create($record) ?>
+    <h2><?= __('Attendance Adding')?></h2>
+    <p><?= __('Company Name')?></p>
+    <p><?=$link->staff->surname?>, <?=$link->staff->given_names?></p>
+    <p id="location-service"></p>
     <fieldset>
-        <legend><?= __('Add Record') ?></legend>
-        <?php
-            echo $this->Form->control('record_id');
-            echo $this->Form->control('staff_id');
-            echo $this->Form->control('longtitude');
-            echo $this->Form->control('latitude');
-            echo $this->Form->control('accuracy');
-            echo $this->Form->control('time', ['empty' => true]);
-            echo $this->Form->control('additional_data');
-            echo $this->Form->control('http_user_agent');
-            echo $this->Form->control('http_cf_ray');
-            echo $this->Form->control('http_cf_connecting_ip');
-            echo $this->Form->control('http_cookie');
-            echo $this->Form->control('create_time', ['empty' => true]);
-            echo $this->Form->control('update_time', ['empty' => true]);
+        <legend><?= __('Attendance Report') ?></legend>
+        <?php // TODO Add the photo field
+
+            echo $this->Form->hidden('staff_id');
+            echo $this->Form->hidden('longtitude');
+            echo $this->Form->hidden('latitude');
+            echo $this->Form->hidden('accuracy');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<script>
+    // Get all the relevant elements
+    let latitude = document.getElementById('latitude');
+    let longitude = document.getElementById('longtitude');
+    let accuracy = document.getElementById('accuracy');
+    let locationDisplay =  document.getElementById('location-service');
+    function getLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition);
+            locationDisplay.innerHTML = "<?=__('Location is ready for upload')?>";
+        } else {
+            // TODO populate the warning message
+            locationDisplay.innerHTML = "<?=__('Unable to obtain location')?>";
+            locationDisplay.classList.add('failed'); //TODO check with layout
+        }
+    }
+
+    function showPosition(position){
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
+        accuracy.value = position.coords.accuracy;
+    }
+
+    getLocation();
+</script>
