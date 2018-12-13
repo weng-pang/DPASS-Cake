@@ -32,8 +32,10 @@ class StaffTable extends Table
         parent::initialize($config);
 
         $this->setTable('staff');
-        $this->setDisplayField('staff_id');
-        $this->setPrimaryKey('staff_id');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+        $this->hasMany('Links')
+            ->setForeignKey('staff_id');
     }
 
     /**
@@ -45,8 +47,8 @@ class StaffTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('staff_id')
-            ->allowEmpty('staff_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->scalar('surname')

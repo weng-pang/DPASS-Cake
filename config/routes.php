@@ -60,8 +60,15 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     /**
+     *  Route for Staff adding attendance record
+     * The link id and language id will be transmitted to the controller
+     */
+    $routes->connect('/attendance/:code/:language',['controller'=>'Records','action'=>'staffadd'])->setPass(['code','language']);
+    $routes->connect('/attendance/:code',['controller'=>'Records','action'=>'staffadd'])->setPass(['code']);
+
+    /**
      * Connect catchall routes for all controllers.
-     *
+     * TODO Remove this one in the future? We will need specific path only.
      * Using the argument `DashedRoute`, the `fallbacks` method is a shortcut for
      *    `$routes->connect('/:controller', ['action' => 'index'], ['routeClass' => 'DashedRoute']);`
      *    `$routes->connect('/:controller/:action/*', [], ['routeClass' => 'DashedRoute']);`
