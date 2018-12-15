@@ -24,7 +24,7 @@ class StaffFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'staff_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'surname' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'given_names' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'start_time' => ['type' => 'time', 'length' => null, 'null' => true, 'default' => '09:00:00', 'comment' => '', 'precision' => null],
@@ -35,7 +35,7 @@ class StaffFixture extends TestFixture
         'update_time' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'create_time' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['staff_id'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -53,16 +53,16 @@ class StaffFixture extends TestFixture
     {
         $this->records = [
             [
-                'staff_id' => 1,
+                'id' => 1,
                 'surname' => 'Lorem ipsum dolor sit amet',
                 'given_names' => 'Lorem ipsum dolor sit amet',
-                'start_time' => '09:32:40',
-                'end_time' => '09:32:40',
+                'start_time' => '02:14:39',
+                'end_time' => '02:14:39',
                 'monthly_wage' => 1.5,
                 'hourly_wage' => 1.5,
                 'status' => 1,
-                'update_time' => '2018-11-23 09:32:40',
-                'create_time' => '2018-11-23 09:32:40'
+                'update_time' => '2018-12-15 02:14:39',
+                'create_time' => '2018-12-15 02:14:39'
             ],
         ];
         parent::init();
