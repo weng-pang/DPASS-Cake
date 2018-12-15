@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
+
 /**
  * Records Controller
  *
@@ -59,6 +60,57 @@ class RecordsController extends AppController
             $this->Flash->error(__('The record could not be saved. Please, try again.'));
         }
         $this->set(compact('record'));
+    }
+
+    /**
+     * Staff Add method
+     *
+     * @param string|null $code Access code
+     * @param string|null $language Language code
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     */
+    public function staffadd($code = null, $language = null){
+        // Configure the language
+        // Fetching the link access code and staff profile
+        $link = $this->Records->Staff->Links
+            ->find('all')
+            ->where(['link' => $code])
+            ->firstOrFail();
+
+        // Fetching the latest attendance records
+        $records = $this->Records
+            ->find('all')
+            ->where(['staff_id'=> $link->staff_id])
+            ->order(['time'=>'DESC'])
+            ->limit(5); //TODO Check to variable setting
+        // Fetch the organisation the staff belongs to
+        $staff = $this->Records->Staff
+            ->find('all',['contain'=>'Organisations'])
+            ->where(['id'=> $link->staff_id])
+            ->first();
+        // checking a GET or POST request
+        // A POST request should contain everything a GET with additional works
+        if ($this->request->is('post')) {
+            // TODO POST Request additions
+            $postData = $this->request->getData();
+            // Process the photo upload
+            if ($postData['photo']['error'] == UPLOAD_ERR_OK){
+                // Store photo
+
+                // Get photo information
+                $this->Flash->set('I can see you are uploading a photo. ');
+
+            }
+            // Get Environment Variables
+        }
+        $record = $this->Records->newEntity();
+        $record->staff_id = $link->staff_id;
+        // sending the data to view layer
+        $this->set('link',($link));
+        $this->set('staff',$staff);
+        $this->set('records',($records));
+        $this->set('record',$record);
+
     }
 
     /**

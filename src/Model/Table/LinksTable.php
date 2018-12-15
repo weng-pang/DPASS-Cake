@@ -37,9 +37,7 @@ class LinksTable extends Table
         $this->setDisplayField('link_id');
         $this->setPrimaryKey('link_id');
 
-        $this->belongsTo('Staff', [
-            'foreignKey' => 'staff_id'
-        ]);
+        $this->belongsTo('Staff');
     }
 
     /**

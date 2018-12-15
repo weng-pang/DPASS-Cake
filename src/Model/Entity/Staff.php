@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * Staff Entity
  *
- * @property int $staff_id
+ * @property int $id
  * @property string $surname
  * @property string $given_names
  * @property \Cake\I18n\FrozenTime $start_time
@@ -16,6 +16,8 @@ use Cake\ORM\Entity;
  * @property int $status
  * @property \Cake\I18n\FrozenTime $update_time
  * @property \Cake\I18n\FrozenTime $create_time
+ *
+ * @property \App\Model\Entity\Link[] $links
  */
 class Staff extends Entity
 {
@@ -38,6 +40,7 @@ class Staff extends Entity
         'hourly_wage' => true,
         'status' => true,
         'update_time' => true,
-        'create_time' => true
+        'create_time' => true,
+        'links' => true
     ];
 }

@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\StaffTable;
+use App\Model\Table\LanguagesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\StaffTable Test Case
+ * App\Model\Table\LanguagesTable Test Case
  */
-class StaffTableTest extends TestCase
+class LanguagesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\StaffTable
+     * @var \App\Model\Table\LanguagesTable
      */
-    public $Staff;
+    public $Languages;
 
     /**
      * Fixtures
@@ -24,8 +24,7 @@ class StaffTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.staff',
-        'app.links'
+        'app.languages'
     ];
 
     /**
@@ -36,8 +35,8 @@ class StaffTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Staff') ? [] : ['className' => StaffTable::class];
-        $this->Staff = TableRegistry::getTableLocator()->get('Staff', $config);
+        $config = TableRegistry::getTableLocator()->exists('Languages') ? [] : ['className' => LanguagesTable::class];
+        $this->Languages = TableRegistry::getTableLocator()->get('Languages', $config);
     }
 
     /**
@@ -47,7 +46,7 @@ class StaffTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Staff);
+        unset($this->Languages);
 
         parent::tearDown();
     }
@@ -68,6 +67,16 @@ class StaffTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

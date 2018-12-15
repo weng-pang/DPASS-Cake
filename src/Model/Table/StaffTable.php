@@ -9,6 +9,10 @@ use Cake\Validation\Validator;
 /**
  * Staff Model
  *
+ * @property \App\Model\Table\LinksTable|\Cake\ORM\Association\HasMany $Links
+ * @property |\Cake\ORM\Association\HasMany $Records
+ * @property |\Cake\ORM\Association\BelongsToMany $Organisations
+ *
  * @method \App\Model\Entity\Staff get($primaryKey, $options = [])
  * @method \App\Model\Entity\Staff newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Staff[] newEntities(array $data, array $options = [])
@@ -32,8 +36,20 @@ class StaffTable extends Table
         parent::initialize($config);
 
         $this->setTable('staff');
-        $this->setDisplayField('staff_id');
-        $this->setPrimaryKey('staff_id');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+
+        $this->hasMany('Links', [
+            'foreignKey' => 'staff_id'
+        ]);
+        $this->hasMany('Records', [
+            'foreignKey' => 'staff_id'
+        ]);
+        $this->belongsToMany('Organisations', [
+            'foreignKey' => 'staff_id',
+            'targetForeignKey' => 'organisation_id',
+            'joinTable' => 'organisations_staff'
+        ]);
     }
 
     /**
@@ -45,8 +61,8 @@ class StaffTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('staff_id')
-            ->allowEmpty('staff_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->scalar('surname')
