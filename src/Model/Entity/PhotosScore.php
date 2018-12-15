@@ -4,20 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Score Entity
+ * PhotosScore Entity
  *
  * @property int $id
- * @property int $record_id
- * @property int $manager_id
- * @property int $score
- * @property string $notes
+ * @property int $photo_id
+ * @property int $score_id
  * @property \Cake\I18n\FrozenTime $create_time
- * @property \Cake\I18n\FrozenTime $update_time
  *
- * @property \App\Model\Entity\Record $record
- * @property \App\Model\Entity\Manager $manager
+ * @property \App\Model\Entity\Photo $photo
+ * @property \App\Model\Entity\Score $score
  */
-class Score extends Entity
+class PhotosScore extends Entity
 {
 
     /**
@@ -30,13 +27,10 @@ class Score extends Entity
      * @var array
      */
     protected $_accessible = [
-        'record_id' => true,
-        'manager_id' => true,
-        'score' => true,
-        'notes' => true,
+        'photo_id' => true,
+        'score_id' => true,
         'create_time' => true,
-        'update_time' => true,
-        'record' => true,
-        'manager' => true
+        'photo' => true,
+        'score' => true
     ];
 }

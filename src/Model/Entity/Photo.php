@@ -6,14 +6,13 @@ use Cake\ORM\Entity;
 /**
  * Photo Entity
  *
- * @property int $photo_id
- * @property int $score_id
+ * @property int $id
  * @property string $photo_path
  * @property string $metadata
  * @property \Cake\I18n\FrozenTime $create_time
  * @property \Cake\I18n\FrozenTime $update_time
  *
- * @property \App\Model\Entity\Score $score
+ * @property \App\Model\Entity\Score[] $scores
  */
 class Photo extends Entity
 {
@@ -28,11 +27,10 @@ class Photo extends Entity
      * @var array
      */
     protected $_accessible = [
-        'score_id' => true,
         'photo_path' => true,
         'metadata' => true,
         'create_time' => true,
         'update_time' => true,
-        'score' => true
+        'scores' => true
     ];
 }

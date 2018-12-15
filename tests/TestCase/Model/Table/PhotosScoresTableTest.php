@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\PhotosTable;
+use App\Model\Table\PhotosScoresTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\PhotosTable Test Case
+ * App\Model\Table\PhotosScoresTable Test Case
  */
-class PhotosTableTest extends TestCase
+class PhotosScoresTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\PhotosTable
+     * @var \App\Model\Table\PhotosScoresTable
      */
-    public $Photos;
+    public $PhotosScores;
 
     /**
      * Fixtures
@@ -24,6 +24,7 @@ class PhotosTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'app.photos_scores',
         'app.photos',
         'app.scores'
     ];
@@ -36,8 +37,8 @@ class PhotosTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Photos') ? [] : ['className' => PhotosTable::class];
-        $this->Photos = TableRegistry::getTableLocator()->get('Photos', $config);
+        $config = TableRegistry::getTableLocator()->exists('PhotosScores') ? [] : ['className' => PhotosScoresTable::class];
+        $this->PhotosScores = TableRegistry::getTableLocator()->get('PhotosScores', $config);
     }
 
     /**
@@ -47,7 +48,7 @@ class PhotosTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Photos);
+        unset($this->PhotosScores);
 
         parent::tearDown();
     }
@@ -68,6 +69,16 @@ class PhotosTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
