@@ -17,7 +17,7 @@
         <?php // TODO Add the photo field
 
             echo $this->Form->hidden('staff_id');
-            echo $this->Form->hidden('longtitude',['id' => 'longitude']);
+            echo $this->Form->hidden('longitude',['id' => 'longitude']);
             echo $this->Form->hidden('latitude',['id' => 'latitude']);
             echo $this->Form->hidden('accuracy',['id' => 'accuracy']);
             echo $this->Form->control('photo',[

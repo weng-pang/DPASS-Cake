@@ -8,7 +8,7 @@ use Cake\ORM\Entity;
  *
  * @property int $record_id
  * @property int $staff_id
- * @property float $longtitude
+ * @property float $longitude
  * @property float $latitude
  * @property float $accuracy
  * @property \Cake\I18n\FrozenTime $time
@@ -34,7 +34,7 @@ class Record extends Entity
      */
     protected $_accessible = [
         'staff_id' => true,
-        'longtitude' => true,
+        'longitude' => true,
         'latitude' => true,
         'accuracy' => true,
         'time' => true,

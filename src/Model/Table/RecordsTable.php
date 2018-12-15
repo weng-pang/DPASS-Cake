@@ -55,8 +55,8 @@ class RecordsTable extends Table
             ->allowEmpty('record_id', 'create');
 
         $validator
-            ->decimal('longtitude')
-            ->allowEmpty('longtitude');
+            ->decimal('longitude')
+            ->allowEmpty('longitude');
 
         $validator
             ->decimal('latitude')
