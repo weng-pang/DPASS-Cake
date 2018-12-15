@@ -33,6 +33,12 @@
 <div>
     <p class="Failed"><?=__('Please Use Mobile Phone')?></p>
 </div>
+<div id="records">
+    <p><?=__('Latest Records')?></p>
+    <?php foreach($records as $item):?>
+    <p><?=$item->time?></p>
+    <?php endforeach?>
+</div>
 <script>
     // Get all the relevant elements
     let latitude = document.getElementById('latitude');

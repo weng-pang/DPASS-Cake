@@ -43,6 +43,7 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Utility\Inflector;
 use Cake\Utility\Security;
+use Cake\I18n\I18n;
 
 /**
  * Uncomment block of code below if you want to use `.env` file during development.
@@ -199,7 +200,13 @@ Type::build('timestamp')
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
 
 /*
- * Allowing the DebugKit to run on shared hosting environment.
- *
+ * Allowing the DebugKit to run on shared hosting environment,
+ * until the debug mode is switched off.
  */
 Configure::write('DebugKit.forceEnable', true);
+
+/*
+ * Setting the default locale
+ * The actual locale should be determined in the controller
+ */
+I18n::setLocale('en_AU');
