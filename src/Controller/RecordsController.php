@@ -95,7 +95,9 @@ class RecordsController extends AppController
             $postData = $this->request->getData();
             // Process the photo upload
             if ($postData['photo']['error'] == UPLOAD_ERR_OK){
+                $exif_data = (exif_read_data($postData['photo']['tmp_name']));
                 // Store photo
+                $photoType = explode('/',$exif_data['MimeType']);
 
                 // Get photo information
                 $this->Flash->set('I can see you are uploading a photo. ');
