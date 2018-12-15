@@ -92,7 +92,15 @@ class RecordsController extends AppController
         // A POST request should contain everything a GET with additional works
         if ($this->request->is('post')) {
             // TODO POST Request additions
+            $postData = $this->request->getData();
+            // Process the photo upload
+            if ($postData['photo']['error'] == UPLOAD_ERR_OK){
+                // Store photo
 
+                // Get photo information
+                $this->Flash->set('I can see you are uploading a photo. ');
+
+            }
             // Get Environment Variables
         }
         $record = $this->Records->newEntity();

@@ -11,13 +11,13 @@
 </div>
 <div class="records form large-9 medium-8 columns content">
 
-    <?= $this->Form->create($record) ?>
+    <?= $this->Form->create($record,['enctype' => 'multipart/form-data']) ?>
 
     <p id="location-service"></p>
         <?php // TODO Add the photo field
 
             echo $this->Form->hidden('staff_id');
-            echo $this->Form->hidden('longtitude',['id' => 'longtitude']);
+            echo $this->Form->hidden('longtitude',['id' => 'longitude']);
             echo $this->Form->hidden('latitude',['id' => 'latitude']);
             echo $this->Form->hidden('accuracy',['id' => 'accuracy']);
             echo $this->Form->control('photo',[
@@ -42,7 +42,7 @@
 <script>
     // Get all the relevant elements
     let latitude = document.getElementById('latitude');
-    let longitude = document.getElementById('longtitude');
+    let longitude = document.getElementById('longitude');
     let accuracy = document.getElementById('accuracy');
     let locationDisplay =  document.getElementById('location-service');
     function getLocation(){
