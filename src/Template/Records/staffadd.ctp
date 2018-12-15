@@ -22,9 +22,14 @@
         <?php // TODO Add the photo field
 
             echo $this->Form->hidden('staff_id');
-            echo $this->Form->hidden('longtitude');
-            echo $this->Form->hidden('latitude');
-            echo $this->Form->hidden('accuracy');
+            echo $this->Form->hidden('longtitude',['id' => 'longtitude']);
+            echo $this->Form->hidden('latitude',['id' => 'latitude']);
+            echo $this->Form->hidden('accuracy',['id' => 'accuracy']);
+            echo $this->Form->control('photo',[
+                    'type' => 'file',
+                    'accept' => 'image/*',
+                    'capture' => 'camera',
+                ]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
