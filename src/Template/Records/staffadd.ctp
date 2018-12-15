@@ -4,21 +4,16 @@
  * @var \App\Model\Entity\Record $record
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Records'), ['action' => 'index']) ?></li>
-    </ul>
-</nav>
+<div>
+    <h3><?= __('Attendance Adding')?></h3>
+    <p><?= __('Company Name')?></p>
+    <p id="staff-name"><?=$link->staff->surname?>, <?=$link->staff->given_names?></p>
+</div>
 <div class="records form large-9 medium-8 columns content">
 
     <?= $this->Form->create($record) ?>
-    <h2><?= __('Attendance Adding')?></h2>
-    <p><?= __('Company Name')?></p>
-    <p><?=$link->staff->surname?>, <?=$link->staff->given_names?></p>
+
     <p id="location-service"></p>
-    <fieldset>
-        <legend><?= __('Attendance Report') ?></legend>
         <?php // TODO Add the photo field
 
             echo $this->Form->hidden('staff_id');
@@ -31,11 +26,13 @@
                     'capture' => 'camera',
                 ]);
         ?>
-    </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
 
+<div>
+    <p class="Failed"><?=__('Please Use Mobile Phone')?></p>
+</div>
 <script>
     // Get all the relevant elements
     let latitude = document.getElementById('latitude');
