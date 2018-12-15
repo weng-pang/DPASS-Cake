@@ -44,11 +44,11 @@
     let locationDisplay =  document.getElementById('location-service');
     function getLocation(){
         if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(showPosition);
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
             locationDisplay.innerHTML = "<?=__('Location is ready for upload')?>";
         } else {
             // TODO populate the warning message
-            locationDisplay.innerHTML = "<?=__('Unable to obtain location')?>";
+            locationDisplay.innerHTML = "<?=__('Location Service is not supported by this browser.')?>";
             locationDisplay.classList.add('failed'); //TODO check with layout
         }
     }
@@ -57,6 +57,24 @@
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
         accuracy.value = position.coords.accuracy;
+    }
+
+    function showError(error){
+        locationDisplay.classList.add('failed'); //TODO check with layout
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                locationDisplay.innerHTML = "User denied the request for Geolocation."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                locationDisplay.innerHTML = "Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                locationDisplay.innerHTML = "The request to get user location timed out."
+                break;
+            case error.UNKNOWN_ERROR:
+                locationDisplay.innerHTML = "An unknown error occurred."
+                break;
+        }
     }
 
     getLocation();
