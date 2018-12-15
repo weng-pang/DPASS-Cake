@@ -95,15 +95,36 @@ class RecordsController extends AppController
             $postData = $this->request->getData();
             // Process the photo upload
             if ($postData['photo']['error'] == UPLOAD_ERR_OK){
-                $exif_data = (exif_read_data($postData['photo']['tmp_name']));
-                // Store photo
-                $photoType = explode('/',$exif_data['MimeType']);
-
                 // Get photo information
-                $this->Flash->set('I can see you are uploading a photo. ');
-
+                $exif_data = (exif_read_data($postData['photo']['tmp_name']));
+                $photoType = explode('/',$exif_data['MimeType']);
+               // Get a new placeholder for photo
+                $photoTable = $this->Records->Scores->Photos;
+                $photo = $photoTable->newEntity();
+                $photo->create_time = time();
+                // Store photo
+                if ($photoTable->save($photo)){
+                    // Store photo information into system
+                    $photo->metadata = serialize($exif_data); // This is an array to string
+                    // append the id number into photo filename
+                    $photo->photo_path = $link->staff_id."-".$photo->id.".".$photoType[1]; // TODO change to time?
+                    // save the photo information again
+                    $photo->update_time = time();
+                    $photoTable->save($photo);
+                } else {
+                    //TODO Error creating the photo database entry
+                }
+                if (!move_uploaded_file($postData['photo']['tmp_name'],ROOT.'/photos/'. $photo->photo_path)){
+                    // TODO Error moving the photo
+                } else {
+                    $this->Flash->success('the photo is stored. ');
+                }
             }
+            // Store Record
             // Get Environment Variables
+
+            // "Calculate" the score
+            // Add to DPass REST
         }
         $record = $this->Records->newEntity();
         $record->staff_id = $link->staff_id;

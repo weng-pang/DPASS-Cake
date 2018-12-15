@@ -40,6 +40,10 @@ class RecordsTable extends Table
         $this->belongsTo('Staff', [
             'foreignKey' => 'staff_id'
         ]);
+        $this->hasMany('Scores',[
+            'foreignKey' => 'record_id'
+        ]);
+
     }
 
     /**
