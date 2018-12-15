@@ -65,25 +65,29 @@ class RecordsController extends AppController
     /**
      * Staff Add method
      *
+     * @param string|null $code Access code
+     * @param string|null $language Language code
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function staffadd($code = null, $language = null){
         // Configure the language
         // Fetching the link access code and staff profile
         $link = $this->Records->Staff->Links
-            ->find('all',['contain'=>'Staff'])
+            ->find('all')
             ->where(['link' => $code])
             ->firstOrFail();
 
-        // Fetching the latest 5 attendance records
+        // Fetching the latest attendance records
         $records = $this->Records
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
-            ->limit(5);
-//        foreach($records as $record){
-//            debug($record);
-//        }
+            ->limit(5); //TODO Check to variable setting
+        // Fetch the organisation the staff belongs to
+        $staff = $this->Records->Staff
+            ->find('all',['contain'=>'Organisations'])
+            ->where(['id'=> $link->staff_id])
+            ->first();
         // checking a GET or POST request
         // A POST request should contain everything a GET with additional works
         if ($this->request->is('post')) {
@@ -95,6 +99,7 @@ class RecordsController extends AppController
         $record->staff_id = $link->staff_id;
         // sending the data to view layer
         $this->set('link',($link));
+        $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('record',$record);
 

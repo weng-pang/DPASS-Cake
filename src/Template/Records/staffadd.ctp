@@ -6,8 +6,8 @@
 ?>
 <div>
     <h3><?= __('Attendance Adding')?></h3>
-    <p><?= __('Company Name')?></p>
-    <p id="staff-name"><?=$link->staff->surname?>, <?=$link->staff->given_names?></p>
+    <p><?= $staff->organisations[0]->name?></p>
+    <p id="staff-name"><?=$staff->surname?>, <?=$staff->given_names?></p>
 </div>
 <div class="records form large-9 medium-8 columns content">
 
