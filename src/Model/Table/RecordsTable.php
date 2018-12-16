@@ -34,8 +34,8 @@ class RecordsTable extends Table
         parent::initialize($config);
 
         $this->setTable('records');
-        $this->setDisplayField('serial');
-        $this->setPrimaryKey('serial');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Staff', [
             'foreignKey' => 'staff_id'
@@ -55,8 +55,8 @@ class RecordsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('record_id')
-            ->allowEmpty('record_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->decimal('longitude')

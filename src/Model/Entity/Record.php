@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * Record Entity
  *
- * @property int $record_id
+ * @property int $id
  * @property int $staff_id
  * @property float $longitude
  * @property float $latitude

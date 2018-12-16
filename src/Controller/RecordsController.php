@@ -72,11 +72,12 @@ class RecordsController extends AppController
     public function staffadd($code = null, $language = null){
         // Configure the language
         // Fetching the link access code and staff profile
+        $record = $this->Records->newEntity();
         $link = $this->Records->Staff->Links
             ->find('all')
             ->where(['link' => $code])
             ->firstOrFail();
-
+        $record->staff_id = $link->staff_id;
         // Fetching the latest attendance records
         $records = $this->Records
             ->find('all')
@@ -90,10 +91,11 @@ class RecordsController extends AppController
             ->first();
         // checking a GET or POST request
         // A POST request should contain everything a GET with additional works
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')) { $this->Flash->success('POST Request triggered');
             // TODO POST Request additions
             $postData = $this->request->getData();
             // Process the photo upload
+            $photoPresented = false;
             if ($postData['photo']['error'] == UPLOAD_ERR_OK){
                 // Get photo information
                 $exif_data = (exif_read_data($postData['photo']['tmp_name']));
@@ -117,17 +119,63 @@ class RecordsController extends AppController
                 if (!move_uploaded_file($postData['photo']['tmp_name'],ROOT.'/photos/'. $photo->photo_path)){
                     // TODO Error moving the photo
                 } else {
-                    $this->Flash->success('the photo is stored. ');
+                    $this->Flash->success('the photo is stored.');
+                    $photoPresented = true;
                 }
             }
             // Store Record
             // Get Environment Variables
+            if (is_null($this->request->getEnv('HTTP_CF_CONNECTING_IP'))){
+                $record->http_cf_connecting_ip = $this->request->getEnv('REMOTE_ADDR');
+            } else {
+                $record->http_cf_connecting_ip = $this->request->getEnv('HTTP_CF_CONNECTING_IP');
+            }
+            $record->http_cf_ray = $this->request->getEnv('HTTP_CF_RAY');
+            $record->http_cookie = $this->request->getEnv('HTTP_COOKIE');
+            $record->http_user_agent = $this->request->getEnv('HTTP_USER_AGENT');
+            // Get Location coordinates
+            $record->longitude = $postData['longitude'];
+            $record->latitude = $postData['latitude'];
+            $record->accuracy = $postData['accuracy'];
+            // Get Time
+            $record->create_time = time();
+            $record->update_time = time();
+            $record->time = time();
+            // Save the record
+            if ($this->Records->save($record)){
+                $this->Flash->success('the record is stored');
+                // "Calculate" the score
+                // Giving the initial score
+                $score = $this->Records->Scores->newEntity();
+                $score->record_id = $record->id;
+                $score->manager_id = 10; //TODO Change to dynamic
+                $score->score = 50;
+                $score->notes = "Added by the System";
+                $score->create_time = time();
+                $score->update_time = time();
+                $this->Records->Scores->save($score);
+                // Giving the photo score
+                if ($photoPresented){
+                    $score = $this->Records->Scores->newEntity();
+                    $score->record_id = $record->id;
+                    $score->manager_id = 10; //TODO Change to dynamic
+                    $score->photos = [$photo];
+                    $score->score = 50;
+                    $score->notes = "Photo is attached. Added by the System";
+                    $score->create_time = time();
+                    $score->update_time = time();
+                    $this->Records->Scores->save($score);
+                } else {
 
-            // "Calculate" the score
+                }
+            } else {
+
+            }
+
             // Add to DPass REST
         }
-        $record = $this->Records->newEntity();
-        $record->staff_id = $link->staff_id;
+
+        $record = $this->Records->newEntity(); // This is needed to a request is made each request.
         // sending the data to view layer
         $this->set('link',($link));
         $this->set('staff',$staff);

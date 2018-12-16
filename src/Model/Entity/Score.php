@@ -16,6 +16,8 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Record $record
  * @property \App\Model\Entity\Manager $manager
+ *
+ * @property \App\Model\Entity\Photo[] $photos
  */
 class Score extends Entity
 {

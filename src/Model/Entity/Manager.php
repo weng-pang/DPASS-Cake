@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * Manager Entity
  *
- * @property int $manager_id
+ * @property int $id
  * @property string $surname
  * @property string $given_names
  * @property int $default_score
