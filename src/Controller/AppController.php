@@ -37,6 +37,8 @@ class AppController extends Controller
      *
      * @return void
      */
+    protected $settings;
+
     public function initialize()
     {
         parent::initialize();
@@ -51,5 +53,38 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+    }
+
+    /**
+     *  Change Locale method
+     *
+     * The locale may be amended here
+     * Default locale is configured in bootstrap.php
+     */
+    protected function changeLanguage(){
+
+    }
+    /**
+     * Getting the Setting tables ready
+     *
+     * @param \Cake\Event\Event $event An Event instance
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(Event $event)
+    {
+        $this->settings = $this->loadModel('Settings');
+        return parent::beforeFilter($event);
+    }
+
+    /**
+     *  Find Setting Method
+     *  The setting from the database is obtained by providing the keyword.
+     *
+     * @param string $keyword
+     * @return string
+     */
+    protected function findSetting($keyword){
+
+        return $this->settings->find('all')->where(['keyword' => $keyword])->first()['content'];
     }
 }

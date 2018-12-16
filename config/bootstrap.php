@@ -210,3 +210,9 @@ Configure::write('DebugKit.forceEnable', true);
  * The actual locale should be determined in the controller
  */
 I18n::setLocale('en_AU');
+
+/*
+ *  Some Numeric Terms to be defined here
+ *  Instead of using a number, it is formed into meaningful words
+ */
+define('SETTING_ENABLE',1);

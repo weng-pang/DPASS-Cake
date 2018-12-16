@@ -1,8 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-
+use Cake\Http\Client;
 
 /**
  * Records Controller
@@ -170,25 +169,25 @@ class RecordsController extends AppController
                 }
                 // Add to DPass REST
 
-                if (1==1){ //TODO Use DPass REST Setting
+                if ($this->findSetting('enable_dpass_rest')==SETTING_ENABLE){
                     $dpassRest = new Client();
                     // Prepare the information
                     $data['id'] = $link->staff_id;
                     $data['dateTime'] = date("Y-m-d H:i:s",$record->time);
-                    $data['machineId'] = 980;
+                    $data['machineId'] = (int)$this->findSetting('dpass_rest_id'); // This must be a number
                     $data['entryId'] = 0; // Leave them zero
                     $data['portNumber'] = 0;
                     $data['ipAddress'] =
                         $this->request->getEnv('SERVER_ADDR') == '::1' ?
                         '127.0.0.1' :
                         $this->request->getEnv('SERVER_ADDR');
-                    $response = $dpassRest->post('https://vflits.com/DPASS-REST/add',
+                    $response = $dpassRest->post($this->findSetting('dpass_rest_add_address'),
                         [
-                            'key' => '5bcd218e-0113-11e9-8eb2-f2801f1b9fd1', // TODO Switch to Settings table'
+                            'key' => $this->findSetting('dpass_rest_key'),
                             'content' => json_encode($data)
                         ]);
 
-                    debug(json_decode($response->getBody()->getContents()));
+                    debug(json_decode($response->getBody()->getContents())); //TODO Remove the debug
                 }
 
             } else {
