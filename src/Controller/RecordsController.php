@@ -168,11 +168,34 @@ class RecordsController extends AppController
                 } else {
 
                 }
-            } else {
+                // Add to DPass REST
 
+                if (1==1){ //TODO Use DPass REST Setting
+                    $dpassRest = new Client();
+                    // Prepare the information
+                    $data['id'] = $link->staff_id;
+                    $data['dateTime'] = date("Y-m-d H:i:s",$record->time);
+                    $data['machineId'] = 980;
+                    $data['entryId'] = 0; // Leave them zero
+                    $data['portNumber'] = 0;
+                    $data['ipAddress'] =
+                        $this->request->getEnv('SERVER_ADDR') == '::1' ?
+                        '127.0.0.1' :
+                        $this->request->getEnv('SERVER_ADDR');
+                    $response = $dpassRest->post('https://vflits.com/DPASS-REST/add',
+                        [
+                            'key' => '5bcd218e-0113-11e9-8eb2-f2801f1b9fd1', // TODO Switch to Settings table'
+                            'content' => json_encode($data)
+                        ]);
+
+                    debug(json_decode($response->getBody()->getContents()));
+                }
+
+            } else {
+                //TODO Failed to add a record
             }
 
-            // Add to DPass REST
+
         }
 
         $record = $this->Records->newEntity(); // This is needed to a request is made each request.
