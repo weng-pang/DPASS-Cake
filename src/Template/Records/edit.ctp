@@ -10,7 +10,7 @@
         <li><?= $this->Form->postLink(
                 __('Delete'),
                 ['action' => 'delete', $record->serial],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $record->serial)]
+                ['confirm' => __('Are you sure you want to delete # {0}?', $record->id)]
             )
         ?></li>
         <li><?= $this->Html->link(__('List Records'), ['action' => 'index']) ?></li>
@@ -23,7 +23,7 @@
         <?php
             echo $this->Form->control('record_id');
             echo $this->Form->control('staff_id');
-            echo $this->Form->control('longtitude');
+            echo $this->Form->control('longitude');
             echo $this->Form->control('latitude');
             echo $this->Form->control('accuracy');
             echo $this->Form->control('time', ['empty' => true]);
