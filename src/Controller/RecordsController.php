@@ -20,7 +20,7 @@ class RecordsController extends AppController
      */
     public function index()
     {
-        $records = $this->paginate($this->Records); debug($this->getMark('pass_mark'));
+        $records = $this->paginate($this->Records);
 
         $this->set(compact('records'));
     }
@@ -144,6 +144,8 @@ class RecordsController extends AppController
                     $this->Flash->success('the photo is stored.'); //TODO Temporary  Flash message
                     $photoPresented = true;
                 }
+            } else {
+                //TODO Error uploading photo to the system
             }
             // Save the record
             if ($this->Records->save($record)){
@@ -213,6 +215,7 @@ class RecordsController extends AppController
             } else {
                 //TODO Failed to add a record
             }
+            $this->set('previousRecord',$record);
         }
 
         $record = $this->Records->newEntity(); // This is needed to ensure a request is made each request.
