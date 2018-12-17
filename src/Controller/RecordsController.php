@@ -70,6 +70,9 @@ class RecordsController extends AppController
      */
     public function staffadd($code = null, $language = null){
         // Configure the language
+        if (!is_null($language)){
+            $this->changeLanguage($language);
+        }
         // Fetching the link access code and staff profile
         $record = $this->Records->newEntity();
         $link = $this->Records->Staff->Links
@@ -209,6 +212,11 @@ class RecordsController extends AppController
                     $record->update_time = time();
                     $this->Records->save($record);
                 }
+                if (is_null($language)){
+                    $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code]);
+                } else {
+                    $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code,$language]);
+                }
 
             } else {
                 //TODO Failed to add a record
@@ -222,11 +230,13 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('record',$record);
-
     }
 
     public function staffaddCompleted($code = null, $language = null){
-
+        // Configure the language
+        if (!is_null($language)){
+            $this->changeLanguage($language);
+        }
         // Re-fetching things here
         $link = $this->Records->Staff->Links
             ->find('all')

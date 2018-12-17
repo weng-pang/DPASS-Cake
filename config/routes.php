@@ -63,11 +63,11 @@ Router::scope('/', function (RouteBuilder $routes) {
      *  Routes for Staff adding attendance record
      * The link id and language id will be transmitted to the controller
      */
-    $routes->connect('/attendance/:code/:language',['controller'=>'Records','action'=>'staffadd'])->setPass(['code','language']);
     $routes->connect('/attendance/:code',['controller'=>'Records','action'=>'staffadd'])->setPass(['code']);
+    $routes->connect('/attendance/:code/:language',['controller'=>'Records','action'=>'staffadd'])->setPass(['code','language']);
 
-    $routes->connect('/reported/:code/:language',['controller'=>'Records','action'=>'staffaddCompleted'])->setPass(['code','language']);
     $routes->connect('/reported/:code',['controller'=>'Records','action'=>'staffaddCompleted'])->setPass(['code']);
+    $routes->connect('/reported/:code/:language',['controller'=>'Records','action'=>'staffaddCompleted'])->setPass(['code','language']);
 
     /**
      * Connect catchall routes for all controllers.

@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\I18n\I18n;
 
 /**
  * Application Controller
@@ -29,6 +30,7 @@ class AppController extends Controller
 {
     protected $settings;
     protected $marks;
+    protected $languages;
 
     /**
      * Initialization hook method.
@@ -54,16 +56,6 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
     }
-
-    /**
-     *  Change Locale method
-     *
-     * The locale may be amended here
-     * Default locale is configured in bootstrap.php
-     */
-    protected function changeLanguage(){
-
-    }
     /**
      * Getting the Setting tables ready
      *
@@ -74,7 +66,26 @@ class AppController extends Controller
     {
         $this->settings = $this->loadModel('Settings');
         $this->marks = $this->loadModel('Marks');
+        $this->languages = $this->loadModel('Languages');
+        // Use the default language
+        $default = (int)$this->settings->find('all')->where(['keyword' => 'default_language'])->first()['content'];
+        $code = $this->languages->get($default)['code'];
+        I18n::setLocale($code); // using the default code
         return parent::beforeFilter($event);
+    }
+
+    /**
+     *  Change Language method
+     *
+     * The language and locale may be amended here
+     * Default locale is configured in bootstrap.php
+     *
+     * @param string $language
+     */
+    protected function changeLanguage($language){
+        $code = $this->languages->get($language)['code'];
+        I18n::setLocale($code);
+        $this->set('language',$language);
     }
 
     /**
