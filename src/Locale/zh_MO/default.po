@@ -1,0 +1,5 @@
+msgid "Attendance Adding"
+msgstr "考勤報到"
+
+msgid "Submit"
+msgstr "遞交"
