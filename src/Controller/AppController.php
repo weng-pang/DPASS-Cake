@@ -84,7 +84,7 @@ class AppController extends Controller
      * @param string $keyword
      * @return string
      */
-    protected function findSetting($keyword){
+    protected function getSetting($keyword){
 
         return $this->settings->find('all')->where(['keyword' => $keyword])->first()['content'];
     }
@@ -96,7 +96,7 @@ class AppController extends Controller
      * @param string $keyword
      * @return int
      */
-    protected function findMark($keyword){
+    protected function getMark($keyword){
 
         return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
     }

@@ -20,7 +20,7 @@ class RecordsController extends AppController
      */
     public function index()
     {
-        $records = $this->paginate($this->Records);
+        $records = $this->paginate($this->Records); debug($this->getMark('pass_mark'));
 
         $this->set(compact('records'));
     }
@@ -82,7 +82,7 @@ class RecordsController extends AppController
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
-            ->limit(5); //TODO Check to variable setting
+            ->limit((int)$this->getSetting('staffadd_view_limit'));
         // Fetch the organisation the staff belongs to
         $staff = $this->Records->Staff
             ->find('all',['contain'=>'Organisations'])
@@ -90,9 +90,32 @@ class RecordsController extends AppController
             ->first();
         // checking a GET or POST request
         // A POST request should contain everything a GET with additional works
-        if ($this->request->is('post')) { $this->Flash->success('POST Request triggered');
+        if ($this->request->is('post')) {
             // TODO POST Request additions
             $postData = $this->request->getData();
+            // Prepare the record here
+            // Get Environment Variables
+            if (is_null($this->request->getEnv('HTTP_CF_CONNECTING_IP'))){
+                $record->http_cf_connecting_ip = $this->request->getEnv('REMOTE_ADDR');
+            } else {
+                $record->http_cf_connecting_ip = $this->request->getEnv('HTTP_CF_CONNECTING_IP');
+            }
+            $record->http_cf_ray = $this->request->getEnv('HTTP_CF_RAY');
+            $record->http_cookie = $this->request->getEnv('HTTP_COOKIE');
+            $record->http_user_agent = $this->request->getEnv('HTTP_USER_AGENT');
+            // Get Location coordinates
+            $record->longitude = $postData['longitude'];
+            $record->latitude = $postData['latitude'];
+            $record->accuracy = $postData['accuracy'];
+            if ($record->accuracy > 0) {
+                $locationPresented = true;
+            } else {
+                $locationPresented = false;
+            }
+            // Get Time
+            $record->create_time = time();
+            $record->update_time = time();
+            $record->time = time();
             // Process the photo upload
             $photoPresented = false;
             if ($postData['photo']['error'] == UPLOAD_ERR_OK){
@@ -118,86 +141,81 @@ class RecordsController extends AppController
                 if (!move_uploaded_file($postData['photo']['tmp_name'],ROOT.'/photos/'. $photo->photo_path)){
                     // TODO Error moving the photo
                 } else {
-                    $this->Flash->success('the photo is stored.');
+                    $this->Flash->success('the photo is stored.'); //TODO Temporary  Flash message
                     $photoPresented = true;
                 }
             }
-            // Store Record
-            // Get Environment Variables
-            if (is_null($this->request->getEnv('HTTP_CF_CONNECTING_IP'))){
-                $record->http_cf_connecting_ip = $this->request->getEnv('REMOTE_ADDR');
-            } else {
-                $record->http_cf_connecting_ip = $this->request->getEnv('HTTP_CF_CONNECTING_IP');
-            }
-            $record->http_cf_ray = $this->request->getEnv('HTTP_CF_RAY');
-            $record->http_cookie = $this->request->getEnv('HTTP_COOKIE');
-            $record->http_user_agent = $this->request->getEnv('HTTP_USER_AGENT');
-            // Get Location coordinates
-            $record->longitude = $postData['longitude'];
-            $record->latitude = $postData['latitude'];
-            $record->accuracy = $postData['accuracy'];
-            // Get Time
-            $record->create_time = time();
-            $record->update_time = time();
-            $record->time = time();
             // Save the record
             if ($this->Records->save($record)){
-                $this->Flash->success('the record is stored');
+                $this->Flash->success('the record is stored. id:'.$record->id); //TODO Temporary Flash message
                 // "Calculate" the score
                 // Giving the initial score
                 $score = $this->Records->Scores->newEntity();
                 $score->record_id = $record->id;
-                $score->manager_id = 10; //TODO Change to dynamic
-                $score->score = 50;
-                $score->notes = "Added by the System";
+                $score->manager_id = (int)$this->getSetting('dpass_system_id');
+                $score->score = $this->getMark('staff_add_record');
+                $score->notes = "Record is added.";
                 $score->create_time = time();
                 $score->update_time = time();
                 $this->Records->Scores->save($score);
-                // Giving the photo score
+                // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
                     $score = $this->Records->Scores->newEntity();
                     $score->record_id = $record->id;
-                    $score->manager_id = 10; //TODO Change to dynamic
+                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
                     $score->photos = [$photo];
-                    $score->score = 50;
-                    $score->notes = "Photo is attached. Added by the System";
+                    $score->score = $this->getMark('staff_add_photo');
+                    $score->notes = "Photo is presented.";
                     $score->create_time = time();
                     $score->update_time = time();
                     $this->Records->Scores->save($score);
-                } else {
-
+                }
+                // Giving the location score.
+                if ($locationPresented){
+                    $score = $this->Records->Scores->newEntity();
+                    $score->record_id = $record->id;
+                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
+                    $score->score = $this->getMark('staff_add_location');;
+                    $score->notes = "Location is presented.";
+                    $score->create_time = time();
+                    $score->update_time = time();
+                    $this->Records->Scores->save($score);
                 }
                 // Add to DPass REST
-
-                if ($this->findSetting('enable_dpass_rest')==SETTING_ENABLE){
+                if ($this->getSetting('enable_dpass_rest')==SETTING_ENABLE){
                     $dpassRest = new Client();
                     // Prepare the information
                     $data['id'] = $link->staff_id;
                     $data['dateTime'] = date("Y-m-d H:i:s",$record->time);
-                    $data['machineId'] = (int)$this->findSetting('dpass_rest_id'); // This must be a number
+                    $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
                     $data['entryId'] = 0; // Leave them zero
                     $data['portNumber'] = 0;
                     $data['ipAddress'] =
                         $this->request->getEnv('SERVER_ADDR') == '::1' ?
                         '127.0.0.1' :
                         $this->request->getEnv('SERVER_ADDR');
-                    $response = $dpassRest->post($this->findSetting('dpass_rest_add_address'),
+                    $response = $dpassRest->post($this->getSetting('dpass_rest_add_address'),
                         [
-                            'key' => $this->findSetting('dpass_rest_key'),
+                            'key' => $this->getSetting('dpass_rest_key'),
                             'content' => json_encode($data)
                         ]);
-
-                    debug(json_decode($response->getBody()->getContents())); //TODO Remove the debug
+                    $jsonResponse = json_decode($response->getBody()->getContents());
+                    if (isset($jsonResponse->error)){
+                        $record->additional_data =
+                            'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
+                    } else {
+                        $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
+                    }
+                    $record->update_time = time();
+                    $this->Records->save($record);
                 }
 
             } else {
                 //TODO Failed to add a record
             }
-
-
         }
 
-        $record = $this->Records->newEntity(); // This is needed to a request is made each request.
+        $record = $this->Records->newEntity(); // This is needed to ensure a request is made each request.
         // sending the data to view layer
         $this->set('link',($link));
         $this->set('staff',$staff);
