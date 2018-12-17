@@ -141,7 +141,6 @@ class RecordsController extends AppController
                 if (!move_uploaded_file($postData['photo']['tmp_name'],ROOT.'/photos/'. $photo->photo_path)){
                     // TODO Error moving the photo
                 } else {
-                    $this->Flash->success('the photo is stored.'); //TODO Temporary  Flash message
                     $photoPresented = true;
                 }
             } else {
@@ -149,7 +148,6 @@ class RecordsController extends AppController
             }
             // Save the record
             if ($this->Records->save($record)){
-                $this->Flash->success('the record is stored. id:'.$record->id); //TODO Temporary Flash message
                 // "Calculate" the score
                 // Giving the initial score
                 $score = $this->Records->Scores->newEntity();
