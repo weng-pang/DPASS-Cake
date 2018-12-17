@@ -27,6 +27,8 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+    protected $settings;
+    protected $marks;
 
     /**
      * Initialization hook method.
@@ -37,8 +39,6 @@ class AppController extends Controller
      *
      * @return void
      */
-    protected $settings;
-
     public function initialize()
     {
         parent::initialize();
@@ -73,6 +73,7 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         $this->settings = $this->loadModel('Settings');
+        $this->marks = $this->loadModel('Marks');
         return parent::beforeFilter($event);
     }
 
@@ -86,5 +87,17 @@ class AppController extends Controller
     protected function findSetting($keyword){
 
         return $this->settings->find('all')->where(['keyword' => $keyword])->first()['content'];
+    }
+
+    /**
+     *  Find Mark Method
+     *  The mark from the database is obtained by providing the keyword.
+     *
+     * @param string $keyword
+     * @return int
+     */
+    protected function findMark($keyword){
+
+        return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
     }
 }
