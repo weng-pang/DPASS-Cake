@@ -213,7 +213,7 @@ class RecordsController extends AppController
             } else {
                 //TODO Failed to add a record
             }
-            $this->set('previousRecord',$record);
+            $this->redirect(['action'=>'staffaddCompleted',$code,$language]);
         }
 
         $record = $this->Records->newEntity(); // This is needed to ensure a request is made each request.
@@ -225,6 +225,30 @@ class RecordsController extends AppController
 
     }
 
+    public function staffaddCompleted($code = null, $language = null){
+
+        // Re-fetching things here
+        $link = $this->Records->Staff->Links
+            ->find('all')
+            ->where(['link' => $code])
+            ->firstOrFail();
+        // Fetching the latest attendance records
+        $records = $this->Records
+            ->find('all')
+            ->where(['staff_id'=> $link->staff_id])
+            ->order(['time'=>'DESC'])
+            ->limit((int)$this->getSetting('staffadd_view_limit'));
+        // Fetch the organisation the staff belongs to
+        $staff = $this->Records->Staff
+            ->find('all',['contain'=>'Organisations'])
+            ->where(['id'=> $link->staff_id])
+            ->first();
+
+        // sending the data to view layer
+        $this->set('link',($link));
+        $this->set('staff',$staff);
+        $this->set('records',($records));
+    }
     /**
      * Edit method
      *

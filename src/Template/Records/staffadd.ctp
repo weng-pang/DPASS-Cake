@@ -2,14 +2,15 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Record $record
+ * @var \App\Model\Entity\Staff $staff
  */
 ?>
-<div>
+<div class="">
     <h3><?= __('Attendance Adding')?></h3>
     <p><?= $staff->organisations[0]->name?></p>
     <p id="staff-name"><?=$staff->surname?>, <?=$staff->given_names?></p>
 </div>
-<div class="records form large-9 medium-8 columns content">
+<div class="record">
 
     <?= $this->Form->create($record,['enctype' => 'multipart/form-data']) ?>
 
