@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use Cake\Http\Client;
-
+use Cake\I18n\Time;
 /**
  * Records Controller
  *
@@ -118,9 +118,9 @@ class RecordsController extends AppController
                 $locationPresented = false;
             }
             // Get Time
-            $record->create_time = time();
-            $record->update_time = time();
-            $record->time = time();
+            $record->create_time = Time::now();
+            $record->update_time = Time::now();
+            $record->time = Time::now();
             // Process the photo upload
             $photoPresented = false;
             if ($postData['photo']['error'] == UPLOAD_ERR_OK){
@@ -130,7 +130,7 @@ class RecordsController extends AppController
                // Get a new placeholder for photo
                 $photoTable = $this->Records->Scores->Photos;
                 $photo = $photoTable->newEntity();
-                $photo->create_time = time();
+                $photo->create_time = Time::now();
                 // Store photo
                 if ($photoTable->save($photo)){
                     // Store photo information into system
@@ -138,7 +138,7 @@ class RecordsController extends AppController
                     // append the id number into photo filename
                     $photo->photo_path = $link->staff_id."-".$photo->id.".".$photoType[1]; // TODO change to time?
                     // save the photo information again
-                    $photo->update_time = time();
+                    $photo->update_time = Time::now();
                     $photoTable->save($photo);
                 } else {
                     //TODO Error creating the photo database entry
@@ -160,8 +160,8 @@ class RecordsController extends AppController
                 $score->manager_id = (int)$this->getSetting('dpass_system_id');
                 $score->score = $this->getMark('staff_add_record');
                 $score->notes = "Record is added.";
-                $score->create_time = time();
-                $score->update_time = time();
+                $score->create_time = Time::now();
+                $score->update_time = Time::now();
                 $this->Records->Scores->save($score);
                 // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
@@ -171,8 +171,8 @@ class RecordsController extends AppController
                     $score->photos = [$photo];
                     $score->score = $this->getMark('staff_add_photo');
                     $score->notes = "Photo is presented.";
-                    $score->create_time = time();
-                    $score->update_time = time();
+                    $score->create_time = Time::now();
+                    $score->update_time = Time::now();
                     $this->Records->Scores->save($score);
                 }
                 // Giving the location score.
@@ -182,8 +182,8 @@ class RecordsController extends AppController
                     $score->manager_id = (int)$this->getSetting('dpass_system_id');
                     $score->score = $this->getMark('staff_add_location');;
                     $score->notes = "Location is presented.";
-                    $score->create_time = time();
-                    $score->update_time = time();
+                    $score->create_time = Time::now();
+                    $score->update_time = Time::now();
                     $this->Records->Scores->save($score);
                 }
                 // Add to DPass REST
@@ -191,7 +191,7 @@ class RecordsController extends AppController
                     $dpassRest = new Client();
                     // Prepare the information
                     $data['id'] = $link->staff_id;
-                    $data['dateTime'] = date("Y-m-d H:i:s",$record->time);
+                    $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
                     $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
                     $data['entryId'] = 0; // Leave them zero
                     $data['portNumber'] = 0;
@@ -211,7 +211,7 @@ class RecordsController extends AppController
                     } else {
                         $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
                     }
-                    $record->update_time = time();
+                    $record->update_time = Time::now();
                     $this->Records->save($record);
                 }
                 if (is_null($language)){
