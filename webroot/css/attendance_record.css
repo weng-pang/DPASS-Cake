@@ -6,3 +6,7 @@
     height:unset!important;
     margin-bottom: 1rem!important;
 }
+
+.btn-record{
+    width:75%;
+}

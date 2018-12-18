@@ -12,7 +12,7 @@
                 'enctype' => 'multipart/form-data',
             'class'=>'form-group',
             'id'=>'record-form']) ?>
-        <p class="text-center"><?= __('Report Your Attendance')?></p>
+        <p class="text-center alert alert-info"><?= __('Report Your Attendance')?></p>
         <p id="staff-name" class="text-center alert alert-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>)</p>
         <p id="location-service" class="alert alert-danger"><?=__('Location Service is loading')?></p>
         <p id="message-service" class="alert alert-success d-none"></p>
@@ -22,25 +22,25 @@
             echo $this->Form->hidden('latitude',['id' => 'latitude']);
             echo $this->Form->hidden('accuracy',['id' => 'accuracy']);?>
         <div class="card-register">
-        <?php    echo $this->Form->control('photo',[
-                    'type' => 'file',
-                    'accept' => 'image/*',
-                    'capture' => 'camera',
-                    'class' => 'form-control',
-                    'label' => __('Take a Photo')
-                ]);
-        ?>
+            <?php    echo $this->Form->control('photo',[
+                        'type' => 'file',
+                        'accept' => 'image/*',
+                        'capture' => 'camera',
+                        'class' => 'form-control',
+                        'label' => __('Take a Photo')
+                    ]);
+            ?>
         </div>
         <?= $this->Form->button(__('Submit'),[
                 'onclick'=>'checkPhotoUpload()',
-            'class'=>'btn btn-primary btn-block'
+            'class'=>'btn btn-primary btn-lg btn-record'
         ]) ?>
         <?= $this->Form->end() ?>
         <div class="text-center">
             <?= $this->Html->link(__('View Previous Records'),
                 '#', [
                         'onclick'=>'viewRecords()',
-                    'class'=>'d-block mt-3'
+                    'class'=>'btn btn-info btn-record'
                 ]) ?>
         </div>
     </div>
