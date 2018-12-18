@@ -10,18 +10,18 @@
     <div class="card-body text-center mb-4">
         <p class="text-center alert alert-success"><?= __('Attendance Reported')?></p>
         <p id="staff-name" class="text-center alert alert-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>)</p>
-        <p>
+        <div class="text-center margin-top">
             <?php if(isset($language)): ?>
-            <?= $this->Html->link(__('Report your attendance'),['controller'=>'Records','action'=>'staffadd',$link->link,$language])?>
+            <?= $this->Html->link(__('Report your attendance again'),['controller'=>'Records','action'=>'staffadd',$link->link,$language],['class'=>'btn btn-info btn-record'])?>
             <?php else: ?>
-            <?= $this->Html->link(__('Report your attendance'),['controller'=>'Records','action'=>'staffadd',$link->link])?>
+            <?= $this->Html->link(__('Report your attendance again'),['controller'=>'Records','action'=>'staffadd',$link->link],['class'=>'btn btn-info btn-record'])?>
             <?php endif ?>
-        </p>
-        <div class="text-center">
+        </div>
+        <div class="text-center margin-top">
             <?= $this->Html->link(__('View Previous Records'),
                 '#', [
                     'onclick'=>'viewRecords()',
-                    'class'=>'d-block mt-3'
+                    'class'=>'btn btn-info btn-record'
                 ]) ?>
         </div>
     </div>
