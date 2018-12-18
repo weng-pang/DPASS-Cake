@@ -232,6 +232,8 @@ class RecordsController extends AppController
     }
 
     public function staffaddCompleted($code = null, $language = null){
+        // Change the layout
+        $this->viewBuilder()->setLayout('attendance_record');
         // Configure the language
         if (!is_null($language)){
             $this->changeLanguage($language);
