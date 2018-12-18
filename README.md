@@ -15,7 +15,12 @@ In case there are more than one built-in server, run this command (using a diffe
 ```bash
 bin/cake server -p 8700
 ```
-
+## Clear Cache
+This command may be used when updating the translation file.
+The cache may be cleared via making this command
+``bash
+bin/cake cache clear_all
+``
 
 ## Configuration
 

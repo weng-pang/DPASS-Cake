@@ -69,6 +69,8 @@ class RecordsController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function staffadd($code = null, $language = null){
+        // Change the layout
+        $this->viewBuilder()->setLayout('attendance_record');
         // Configure the language
         if (!is_null($language)){
             $this->changeLanguage($language);
