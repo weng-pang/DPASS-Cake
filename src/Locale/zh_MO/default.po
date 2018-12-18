@@ -42,14 +42,14 @@ msgstr "是"
 msgid "Cancel"
 msgstr "取消"
 
-msgid ""
-msgstr ""
+msgid "View Previous Records"
+msgstr "檢視之前記錄"
 
-msgid ""
-msgstr ""
+msgid "Attendance Reported"
+msgstr "成功記錄考勤"
 
-msgid ""
-msgstr ""
+msgid "Report your attendance again"
+msgstr "再記錄考勤"
 
 msgid ""
 msgstr ""
