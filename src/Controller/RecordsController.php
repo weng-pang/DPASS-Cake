@@ -245,11 +245,12 @@ class RecordsController extends AppController
             ->where(['link' => $code])
             ->firstOrFail();
         // Fetching the latest attendance records
+        $viewLimit = (int)$this->getSetting('staffadd_view_limit') + 1;  // Adding one more to highlight the latest one
         $records = $this->Records
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
-            ->limit((int)$this->getSetting('staffadd_view_limit') + 1); // Adding one more to highlight the latest one
+            ->limit($viewLimit);
         // Fetch the organisation the staff belongs to
         $staff = $this->Records->Staff
             ->find('all',['contain'=>'Organisations'])
@@ -260,6 +261,7 @@ class RecordsController extends AppController
         $this->set('link',($link));
         $this->set('staff',$staff);
         $this->set('records',($records));
+        $this->set('recordLimit',$viewLimit);
     }
     /**
      * Edit method
