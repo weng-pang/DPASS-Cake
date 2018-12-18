@@ -14,7 +14,7 @@
             'id'=>'record-form']) ?>
         <p class="text-center"><?= __('Report Your Attendance')?></p>
         <p id="staff-name" class="text-center alert alert-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>)</p>
-        <p id="location-service" class="alert alert-success"></p>
+        <p id="location-service" class="alert alert-danger"><?=__('Location Service is loading')?></p>
         <p id="message-service" class="alert alert-success d-none"></p>
         <?php // TODO Add the photo field
             echo $this->Form->hidden('staff_id');
@@ -105,11 +105,11 @@
         if (navigator.geolocation){
             navigator.geolocation.getCurrentPosition(showPosition, showError);
             locationDisplay.innerHTML = "<?=__('Location is ready for upload')?>";
+            locationDisplay.classList.remove('alert-danger');
+            locationDisplay.classList.add('alert-success');
         } else {
             // TODO populate the warning message
             locationDisplay.innerHTML = "<?=__('Location Service is not supported by this browser.')?>";
-            locationDisplay.classList.add('alert-danger');
-            locationDisplay.classList.remove('alert-success');
         }
     }
 
@@ -120,8 +120,6 @@
     }
 
     function showError(error){
-        locationDisplay.classList.add('alert-danger');
-        locationDisplay.classList.remove('alert-success');
         switch(error.code) {
             case error.PERMISSION_DENIED:
                 locationDisplay.innerHTML = "<?=__('User denied the request for Geolocation.')?>";
