@@ -45,17 +45,8 @@
         </div>
     </div>
 </div>
-<div class="card card-login mx-auto mt-5 d-none d-md-block">
-    <div class="card-body">
-        <p class="alert alert-danger"><span class="ui-icon ui-icon-closethick"></span> <?=__('Please Use Mobile Phone for this page')?></p>
-    </div>
-</div>
-<div id="records" class="card card-login mx-auto" title="<?=__('Latest Records')?>">
-    <p><?=__('Displaying the latest {0} records',($recordLimit))?></p>
-    <?php foreach($records as $item):?>
-    <p><?=$item->time?></p>
-    <?php endforeach?>
-</div>
+
+
 
 <div id="no-photo-confirm" title="<?=__('Photo is not attached')?>" style="display: none">
     <p><?=__('Photo is not attached. Are you sure to continue?')?></p>
@@ -67,21 +58,6 @@
     let longitude = document.getElementById('longitude');
     let accuracy = document.getElementById('accuracy');
     let locationDisplay =  document.getElementById('location-service');
-
-    $( function() {
-        $("#records").dialog({
-            autoOpen: false,
-            resizable: false,
-            show: {
-                effect: "blind",
-                duration: 1000
-            },
-            hide: {
-                effect: "blind",
-                duration: 1000
-            }
-        });
-    });
 
     $( function() {
         $( "#no-photo-confirm" ).dialog({
@@ -140,10 +116,6 @@
             $( "#no-photo-confirm" ).dialog( "open" );
             event.returnValue = false; // Stop the original form submit
         }
-    }
-
-    function viewRecords(){
-        $( "#records" ).dialog( "open" );
     }
 
     getLocation();

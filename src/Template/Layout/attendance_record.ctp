@@ -33,11 +33,45 @@
       <?= $this->Html->script('jquery-3.3.1.min') ?>
       <?= $this->Html->script('bootstrap.min') ?>
       <?= $this->Html->script('jquery-ui') ?>
+      <script>
+          $( document ).ready(function() {
+              $( function() {
+                  $("#records").dialog({
+                      autoOpen: false,
+                      resizable: false,
+                      show: {
+                          effect: "blind",
+                          duration: 1000
+                      },
+                      hide: {
+                          effect: "blind",
+                          duration: 1000
+                      }
+                  });
+              });
+          });
+      </script>
   </head>
 
   <body class="bg-dark">
     <div class="container">
         <?= $this->fetch('content') ?>
+        <div class="card card-login mx-auto mt-5 d-none d-md-block">
+            <div class="card-body">
+                <p class="alert alert-danger"><span class="ui-icon ui-icon-closethick"></span> <?=__('Please Use Mobile Phone for this page')?></p>
+            </div>
+        </div>
+        <div id="records" class="card card-login mx-auto" title="<?=__('Latest Records')?>">
+            <p><?=__('Displaying the latest {0} records',($recordLimit))?></p>
+            <?php foreach($records as $item):?>
+                <p><?=$item->time?></p>
+            <?php endforeach?>
+        </div>
     </div>
   </body>
+<script>
+    function viewRecords(){
+        $( "#records" ).dialog( "open" );
+    }
+</script>
 </html>
