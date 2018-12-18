@@ -229,6 +229,7 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('record',$record);
+        $this->set('recordLimit',(int)$this->getSetting('staffadd_view_limit'));
     }
 
     public function staffaddCompleted($code = null, $language = null){
