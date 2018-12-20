@@ -187,7 +187,7 @@ class RecordsController extends AppController
                     $this->Records->Scores->save($score);
                 }
                 // Add to DPass REST
-                if ($this->getSetting('enable_dpass_rest')==SETTING_ENABLE){
+                if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
                     $dpassRest = new Client();
                     // Prepare the information
                     $data['id'] = $link->staff_id;
