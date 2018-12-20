@@ -7,15 +7,14 @@
 ?>
 <div class="card card-login mx-auto mt-5 d-md-none">
     <h3 class="card-header"><?= __($staff->organisations[0]->name)?></h3>
-    <div class="card-body text-center mb-4">
+    <div class="card-body mb-4">
         <?= $this->Form->create($record,[
                 'enctype' => 'multipart/form-data',
             'class'=>'form-group',
             'id'=>'record-form']) ?>
-        <p class="text-center alert alert-info"><?= __('Report Your Attendance')?></p>
-        <p id="staff-name" class="text-center alert alert-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>)</p>
+        <p id="staff-name" class="record-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>) <?= __('Report Your Attendance')?></p>
         <p id="location-service" class="alert alert-danger"><?=__('Location Service is loading')?></p>
-        <p id="message-service" class="alert alert-success d-none"></p>
+        <p id="message-service" class="alert alert-success d-none record-info"></p>
         <?php // TODO Add the photo field
             echo $this->Form->hidden('staff_id');
             echo $this->Form->hidden('longitude',['id' => 'longitude']);
@@ -31,10 +30,12 @@
                     ]);
             ?>
         </div>
+        <div class="text-center">
         <?= $this->Form->button(__('Submit'),[
                 'onclick'=>'checkPhotoUpload()',
-            'class'=>'btn btn-primary btn-lg btn-record'
+            'class'=>'btn btn-primary btn-lg btn-record text-center'
         ]) ?>
+        </div>
         <?= $this->Form->end() ?>
         <div class="text-center">
             <?= $this->Html->link(__('View Previous Records'),
@@ -83,8 +84,12 @@
             locationDisplay.innerHTML = "<?=__('Location is ready for upload')?>";
             locationDisplay.classList.remove('alert-danger');
             locationDisplay.classList.add('alert-success');
+            locationDisplay.classList.add('fa');
+            locationDisplay.classList.add('fa-check');
         } else {
             // TODO populate the warning message
+            locationDisplay.classList.add('alert-danger');
+            locationDisplay.classList.remove('alert-success');
             locationDisplay.innerHTML = "<?=__('Location Service is not supported by this browser.')?>";
         }
     }
@@ -96,6 +101,8 @@
     }
 
     function showError(error){
+        locationDisplay.classList.add('alert-danger');
+        locationDisplay.classList.remove('alert-success');
         switch(error.code) {
             case error.PERMISSION_DENIED:
                 locationDisplay.innerHTML = "<?=__('User denied the request for Geolocation.')?>";
