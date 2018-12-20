@@ -247,7 +247,7 @@ return [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => '43.255.154.38',
+            'host' => 'localhost',
             /*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
@@ -257,6 +257,12 @@ return [
             'username' => 'dpass-cake',
             'password' => 'T},eSbb[Y9\'$VB$}',
             'database' => 'dpass-cake-dev',
+            /*
+             * Backup schema file setting
+             * The system may search for all schema with this prefix for database reset / installation
+             */
+            'file_prefix' => 'database',
+            'file_type' => '.sql',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
@@ -295,7 +301,7 @@ return [
             'className' => 'Cake\Database\Connection',
             'driver' => 'Cake\Database\Driver\Mysql',
             'persistent' => false,
-            'host' => 'localhost',
+            'host' => '43.255.154.38',
             //'port' => 'non_standard_port_number',
             'username' => 'my_app',
             'password' => 'secret',
