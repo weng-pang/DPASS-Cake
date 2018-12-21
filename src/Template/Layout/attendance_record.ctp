@@ -58,7 +58,7 @@
         <?= $this->fetch('content') ?>
         <div class="card card-login mx-auto mt-5 d-none d-md-block">
             <div class="card-body">
-                <p class="alert alert-danger"><span class="ui-icon ui-icon-closethick"></span> <?=__('Please Use Mobile Phone for this page')?></p>
+                <p class="alert alert-danger"><span class="fa fa-times-circle"></span> <?=__('Please Use Mobile Phone for this page')?></p>
             </div>
         </div>
         <div id="records" class="card card-login mx-auto" title="<?=__('Latest Records')?>">

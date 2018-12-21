@@ -13,7 +13,7 @@
             'class'=>'form-group',
             'id'=>'record-form']) ?>
         <p id="staff-name" class="record-info"><?=$staff->surname?>, <?=$staff->given_names?> (<?=$staff->id?>) <?= __('Report Your Attendance')?></p>
-        <p id="location-service" class="alert alert-danger"><?=__('Location Service is loading')?></p>
+        <p id="location-service" class="alert alert-danger fa"><?=__('Location Service is loading')?></p>
         <p id="message-service" class="alert alert-success d-none record-info"></p>
         <?php // TODO Add the photo field
             echo $this->Form->hidden('staff_id');
@@ -77,20 +77,28 @@
             }
         });
     } );
+    function locationSuccess(){
+        locationDisplay.classList.remove('alert-danger');
+        locationDisplay.classList.remove('fa-times-circle');
+        locationDisplay.classList.add('alert-success');
+        locationDisplay.classList.add('fa-check-circle');
+    }
+
+    function locationFail(){
+        locationDisplay.classList.remove('alert-success');
+        locationDisplay.classList.remove('fa-check-circle');
+        locationDisplay.classList.add('alert-danger');
+        locationDisplay.classList.add('fa-times-circle');
+    }
 
     function getLocation(){
         if (navigator.geolocation){
             navigator.geolocation.getCurrentPosition(showPosition, showError);
-            locationDisplay.innerHTML = "<?=__('Location is ready for upload')?>";
-            locationDisplay.classList.remove('alert-danger');
-            locationDisplay.classList.add('alert-success');
-            locationDisplay.classList.add('fa');
-            locationDisplay.classList.add('fa-check');
+
         } else {
             // TODO populate the warning message
-            locationDisplay.classList.add('alert-danger');
-            locationDisplay.classList.remove('alert-success');
-            locationDisplay.innerHTML = "<?=__('Location Service is not supported by this browser.')?>";
+            locationDisplay.innerHTML = " <?=__('Location Service is not supported by this browser.')?>";
+            locationFail();
         }
     }
 
@@ -98,25 +106,26 @@
         latitude.value = position.coords.latitude;
         longitude.value = position.coords.longitude;
         accuracy.value = position.coords.accuracy;
+        locationDisplay.innerHTML = " <?=__('Location is ready for upload')?>";
+        locationSuccess();
     }
 
     function showError(error){
-        locationDisplay.classList.add('alert-danger');
-        locationDisplay.classList.remove('alert-success');
         switch(error.code) {
             case error.PERMISSION_DENIED:
-                locationDisplay.innerHTML = "<?=__('User denied the request for Geolocation.')?>";
+                locationDisplay.innerHTML = " <?=__('User denied the request for Geolocation.')?>";
                 break;
             case error.POSITION_UNAVAILABLE:
-                locationDisplay.innerHTML = "<?=__('Location information is unavailable.')?>";
+                locationDisplay.innerHTML = " <?=__('Location information is unavailable.')?>";
                 break;
             case error.TIMEOUT:
-                locationDisplay.innerHTML = "<?=__('The request to get user location timed out.')?>";
+                locationDisplay.innerHTML = " <?=__('The request to get user location timed out.')?>";
                 break;
             default:
-                locationDisplay.innerHTML = "<?=__('An unknown error occurred.')?>:";
+                locationDisplay.innerHTML = " <?=__('An unknown error occurred.')?>:";
                 break;
         }
+        locationFail();
     }
     function checkPhotoUpload(){
         if (document.getElementById("photo").files.length == 0){
