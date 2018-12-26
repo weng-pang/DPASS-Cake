@@ -32,8 +32,8 @@ class ManagersTable extends Table
         parent::initialize($config);
 
         $this->setTable('managers');
-        $this->setDisplayField('manager_id');
-        $this->setPrimaryKey('manager_id');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
     }
 
     /**
@@ -45,8 +45,8 @@ class ManagersTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('manager_id')
-            ->allowEmpty('manager_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->scalar('surname')

@@ -206,7 +206,7 @@ Type::build('timestamp')
 Configure::write('DebugKit.forceEnable', true);
 
 /*
- * Setting the default locale
- * The actual locale should be determined in the controller
+ *  Some Numeric Terms to be defined here
+ *  Instead of using a number, it is formed into meaningful words
  */
-I18n::setLocale('en_AU');
+define('SETTING_ENABLE',1);

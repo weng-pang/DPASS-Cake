@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Photos Model
  *
- * @property \App\Model\Table\ScoresTable|\Cake\ORM\Association\BelongsTo $Scores
+ * @property \App\Model\Table\ScoresTable|\Cake\ORM\Association\BelongsToMany $Scores
  *
  * @method \App\Model\Entity\Photo get($primaryKey, $options = [])
  * @method \App\Model\Entity\Photo newEntity($data = null, array $options = [])
@@ -34,11 +34,13 @@ class PhotosTable extends Table
         parent::initialize($config);
 
         $this->setTable('photos');
-        $this->setDisplayField('photo_id');
-        $this->setPrimaryKey('photo_id');
+        $this->setDisplayField('photo_path');
+        $this->setPrimaryKey('id');
 
-        $this->belongsTo('Scores', [
-            'foreignKey' => 'score_id'
+        $this->belongsToMany('Scores', [
+            'foreignKey' => 'photo_id',
+            'targetForeignKey' => 'score_id',
+            'joinTable' => 'photos_scores'
         ]);
     }
 
@@ -51,8 +53,8 @@ class PhotosTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('photo_id')
-            ->allowEmpty('photo_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->scalar('photo_path')
@@ -61,7 +63,7 @@ class PhotosTable extends Table
 
         $validator
             ->scalar('metadata')
-            ->maxLength('metadata', 1000)
+            ->maxLength('metadata', 16777215)
             ->allowEmpty('metadata');
 
         $validator
@@ -73,19 +75,5 @@ class PhotosTable extends Table
             ->allowEmpty('update_time');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['score_id'], 'Scores'));
-
-        return $rules;
     }
 }

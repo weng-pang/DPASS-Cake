@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * Score Entity
  *
- * @property int $score_id
+ * @property int $id
  * @property int $record_id
  * @property int $manager_id
  * @property int $score
@@ -16,6 +16,8 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Record $record
  * @property \App\Model\Entity\Manager $manager
+ *
+ * @property \App\Model\Entity\Photo[] $photos
  */
 class Score extends Entity
 {

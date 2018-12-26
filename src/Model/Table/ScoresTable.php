@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\RecordsTable|\Cake\ORM\Association\BelongsTo $Records
  * @property \App\Model\Table\ManagersTable|\Cake\ORM\Association\BelongsTo $Managers
+ * @property |\Cake\ORM\Association\BelongsToMany $Photos
  *
  * @method \App\Model\Entity\Score get($primaryKey, $options = [])
  * @method \App\Model\Entity\Score newEntity($data = null, array $options = [])
@@ -35,14 +36,19 @@ class ScoresTable extends Table
         parent::initialize($config);
 
         $this->setTable('scores');
-        $this->setDisplayField('score_id');
-        $this->setPrimaryKey('score_id');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Records', [
             'foreignKey' => 'record_id'
         ]);
         $this->belongsTo('Managers', [
             'foreignKey' => 'manager_id'
+        ]);
+        $this->belongsToMany('Photos', [
+            'foreignKey' => 'score_id',
+            'targetForeignKey' => 'photo_id',
+            'joinTable' => 'photos_scores'
         ]);
     }
 
@@ -55,8 +61,8 @@ class ScoresTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('score_id')
-            ->allowEmpty('score_id', 'create');
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
         $validator
             ->allowEmpty('score');

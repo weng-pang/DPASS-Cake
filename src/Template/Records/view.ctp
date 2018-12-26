@@ -7,8 +7,8 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Record'), ['action' => 'edit', $record->serial]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Record'), ['action' => 'delete', $record->serial], ['confirm' => __('Are you sure you want to delete # {0}?', $record->serial)]) ?> </li>
+        <li><?= $this->Html->link(__('Edit Record'), ['action' => 'edit', $record->id]) ?> </li>
+        <li><?= $this->Form->postLink(__('Delete Record'), ['action' => 'delete', $record->id], ['confirm' => __('Are you sure you want to delete # {0}?', $record->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Records'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Record'), ['action' => 'add']) ?> </li>
     </ul>
@@ -45,8 +45,8 @@
             <td><?= $this->Number->format($record->staff_id) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Longtitude') ?></th>
-            <td><?= $this->Number->format($record->longtitude) ?></td>
+            <th scope="row"><?= __('Longitude') ?></th>
+            <td><?= $this->Number->format($record->longitude) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Latitude') ?></th>

@@ -1,0 +1,64 @@
+# Company Names
+msgid "Greenhouse Florist"
+msgstr "花工坊花店"
+
+msgid "Valentine Flower Shop"
+msgstr "華綸泰花店"
+
+# Interfaces
+msgid "Report Your Attendance"
+msgstr "考勤報到"
+
+msgid "Submit"
+msgstr "遞交"
+
+msgid "Location is ready for upload"
+msgstr "定位位置資料正確"
+
+msgid "Latest Records"
+msgstr "最近考勤記錄"
+
+msgid "View Previous Records"
+msgstr "檢視最近考勤記錄"
+
+msgid "Take a Photo"
+msgstr "上載照片"
+
+msgid "Displaying the latest {0} records"
+msgstr "最近 {0} 項考勤記錄"
+
+msgid "Please Use Mobile Phone for this page"
+msgstr "請使用手提電話報到考勤"
+
+msgid "Photo is not attached"
+msgstr "沒有照片"
+
+msgid "Photo is not attached. Are you sure to continue?"
+msgstr "照片沒有附上，請問是否繼續報到？"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "View Previous Records"
+msgstr "檢視之前記錄"
+
+msgid "Attendance Reported"
+msgstr "成功記錄考勤"
+
+msgid "Report your attendance again"
+msgstr "再記錄考勤"
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
