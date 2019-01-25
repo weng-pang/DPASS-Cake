@@ -155,71 +155,24 @@ class RecordsController extends AppController
             if ($this->Records->save($record)){
                 // "Calculate" the score
                 // Giving the initial score
-                $score = $this->Records->Scores->newEntity();
-                $score->record_id = $record->id;
-                $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                $score->score = $this->getMark('staff_add_record');
-                $score->notes = "Record is added.";
-                $score->create_time = Time::now();
-                $score->update_time = Time::now();
-                $this->Records->Scores->save($score);
+                $this->giveScore($record,'staff_add_record',"Record is added.");
                 // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
-                    $score = $this->Records->Scores->newEntity();
-                    $score->record_id = $record->id;
-                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                    $score->photos = [$photo];
-                    $score->score = $this->getMark('staff_add_photo');
-                    $score->notes = "Photo is presented.";
-                    $score->create_time = Time::now();
-                    $score->update_time = Time::now();
-                    $this->Records->Scores->save($score);
+                    $this->giveScore($record,'staff_add_photo',"Photo is presented.");
                 }
                 // Giving the location score.
                 if ($locationPresented){
-                    $score = $this->Records->Scores->newEntity();
-                    $score->record_id = $record->id;
-                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                    $score->score = $this->getMark('staff_add_location');;
-                    $score->notes = "Location is presented.";
-                    $score->create_time = Time::now();
-                    $score->update_time = Time::now();
-                    $this->Records->Scores->save($score);
+                    $this->giveScore($record,'staff_add_location',"Location is presented.");
                 }
                 // Add to DPass REST
                 if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                    $dpassRest = new Client();
-                    // Prepare the information
-                    $data['id'] = $link->staff_id;
-                    $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
-                    $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
-                    $data['entryId'] = 0; // Leave them zero
-                    $data['portNumber'] = 0;
-                    $data['ipAddress'] =
-                        $this->request->getEnv('SERVER_ADDR') == '::1' ?
-                        '127.0.0.1' :
-                        $this->request->getEnv('SERVER_ADDR');
-                    $response = $dpassRest->post($this->getSetting('dpass_rest_add_address'),
-                        [
-                            'key' => $this->getSetting('dpass_rest_key'),
-                            'content' => json_encode($data)
-                        ]);
-                    $jsonResponse = json_decode($response->getBody()->getContents());
-                    if (isset($jsonResponse->error)){
-                        $record->additional_data =
-                            'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
-                    } else {
-                        $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
-                    }
-                    $record->update_time = Time::now();
-                    $this->Records->save($record);
+                    $this->addRestRecord($record);
                 }
                 if (is_null($language)){
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code]);
                 } else {
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code,$language]);
                 }
-
             } else {
                 //TODO Failed to add a record
             }
@@ -262,6 +215,69 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('recordLimit',$viewLimit);
+    }
+
+    /**
+     * giveScore method
+     *
+     * Score of a record will be added according to the score name,
+     * the method then fetch the set score value to add into the scores table.
+     *
+     * Note this method resembles the system into a person making the score.
+     *
+     * @param \App\Model\Table\RecordsTable $record
+     * @param String $scoreName
+     * @param String $note
+     */
+    private function giveScore($record, $scoreName, $note){
+        $score = $this->Records->Scores->newEntity();
+        $score->record_id = $record->id;
+        $score->manager_id = (int)$this->getSetting('dpass_system_id');
+        $score->score = $this->getMark($scoreName);
+        $score->notes = $note;
+        $score->create_time = Time::now();
+        $score->update_time = Time::now();
+        $this->Records->Scores->save($score);
+    }
+
+    /**
+     * addRestRecord method
+     *
+     * This is a fallback and backup measure for this system
+     * By using this method, the record is 'copied' into the DPASS REST system
+     *
+     * Note this method does not copy scores into DPASS REST.
+     * Note also this method does not check redundant record at DPASS REST,
+     * it simply copies records only. Please use with caution.
+     *
+     * @param $record
+     */
+    private function addRestRecord($record){
+        $dpassRest = new Client();
+        // Prepare the information
+        $data['id'] = $record->staff_id;
+        $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
+        $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
+        $data['entryId'] = 0; // Leave them zero
+        $data['portNumber'] = 0;
+        $data['ipAddress'] =
+            $this->request->getEnv('SERVER_ADDR') == '::1' ?
+                '127.0.0.1' :
+                $this->request->getEnv('SERVER_ADDR');
+        $response = $dpassRest->post($this->getSetting('dpass_rest_add_address'),
+            [
+                'key' => $this->getSetting('dpass_rest_key'),
+                'content' => json_encode($data)
+            ]);
+        $jsonResponse = json_decode($response->getBody()->getContents());
+        if (isset($jsonResponse->error)){
+            $record->additional_data =
+                'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
+        } else { //TODO Hardcoded REST transaction id
+            $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
+        }
+        $record->update_time = Time::now();
+        $this->Records->save($record);
     }
     /**
      * Edit method
