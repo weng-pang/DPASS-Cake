@@ -96,8 +96,7 @@ Router::scope('/', function (RouteBuilder $routes) {
  * Routes for allowing API access
  *
  */
-Router::scope('/api', function ($routes) {
-    $routes;
+Router::scope('/api', function (RouteBuilder $routes) {
     $routes->connect('/records/add',['controller'=>'Records','action'=>'restAdd']);
     $routes->resources('Records');
 });

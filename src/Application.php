@@ -21,7 +21,6 @@ use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
 /**
  * Application setup class.
  *
@@ -95,5 +94,7 @@ class Application extends BaseApplication
             'httpOnly' => true,
         ];
         $routes->registerMiddleware('csrf', new CsrfProtectionMiddleware($options));
+
+        return parent::routes($routes);
     }
 }
