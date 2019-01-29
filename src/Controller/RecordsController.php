@@ -154,7 +154,7 @@ class RecordsController extends AppController
             // Save the record
             if ($this->Records->save($record)){
                 // "Calculate" the score
-                // Giving the initial score
+                // Giving the initial score //TODO see https://trello.com/c/7yiiJ79c
                 $this->giveScore($record,'staff_add_record',"Record is added.");
                 // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
@@ -215,6 +215,25 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('recordLimit',$viewLimit);
+    }
+
+    /**
+     *
+     */
+    public function restAdd(){
+        $this->viewBuilder()->setClassName('Json');
+        if ($this->request->is('post')) {
+            $formData = $this->request->getData();
+            // Check for API key
+            if ($this->checkKey($formData['key'])){
+                // add record accordingly
+            } else {
+                // API Key is invalid
+                $errorMessage['error'] = $this->keyError;
+                $this->set('json',json_encode($errorMessage));
+            }
+        }
+
     }
 
     /**

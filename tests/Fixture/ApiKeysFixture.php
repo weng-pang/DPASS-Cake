@@ -17,13 +17,15 @@ class ApiKeysFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'key' => ['type' => 'string', 'length' => 64, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'expire' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'revoked' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'comment' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['key'], 'length' => []],
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+            'key' => ['type' => 'unique', 'columns' => ['key'], 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -41,9 +43,10 @@ class ApiKeysFixture extends TestFixture
     {
         $this->records = [
             [
-                'key' => 'f7dff43d-abcc-4962-808a-77c9380fc481',
-                'created' => '2018-08-20 01:02:53',
-                'expire' => '2018-08-20 01:02:53',
+                'id' => 1,
+                'key' => 'Lorem ipsum dolor sit amet',
+                'created' => '2019-01-26 12:59:25',
+                'expire' => '2019-01-26 12:59:25',
                 'revoked' => 1,
                 'comment' => 'Lorem ipsum dolor sit amet'
             ],

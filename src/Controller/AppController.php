@@ -17,7 +17,8 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\I18n\I18n;
-
+use Cake\I18n\Time;
+use Cake\Core\Exception\Exception;
 /**
  * Application Controller
  *
@@ -31,6 +32,7 @@ class AppController extends Controller
     protected $settings;
     protected $marks;
     protected $languages;
+    protected $keyError;
 
     /**
      * Initialization hook method.
@@ -111,4 +113,48 @@ class AppController extends Controller
 
         return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
     }
+
+    /**
+     * Check method
+     *
+     * Check if a key is valid in the system
+     * A key is valid only when all conditions are met:
+     *  - it is presented in the system
+     *  - it is not expired
+     *  - it is not revoked
+     *
+     * @param string|null $key Api Key.
+     * @return boolean
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When the key is not found.
+     * @throws KeyInvalidException When the key is invalid.
+     */
+    public function checkKey($key = null)
+    {
+        try {
+            $this->loadModel('ApiKeys');
+            $apiKey = $this->ApiKeys->find('all')
+                ->where(['ApiKeys.key'=>$key])
+                ->firstOrFail(); // Throws RecordNotFoundException if no key is found
+            // Check expiry date
+            if (Time::now() > $apiKey->expire)
+            {
+                throw new KeyInvalidException(['reason' => 'Expired']);
+            }
+            // Check revoke status
+            if ($apiKey->revoked){
+                throw new KeyInvalidException(['reason' => 'Revoked']);
+            }
+            return true;
+        } catch(Exception $e){
+            $this->keyError = $e->getMessage();
+            ;
+            return false;
+        }
+    }
+}
+
+class KeyInvalidException extends Exception
+{
+    protected $_messageTemplate = 'The API Key is %s';
+    protected $_defaultCode = 500;
 }
