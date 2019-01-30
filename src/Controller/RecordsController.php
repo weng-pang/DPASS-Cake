@@ -117,6 +117,8 @@ class RecordsController extends AppController
             } else {
                 $locationPresented = false;
             }
+            // Append Machine ID
+            $record->machine_code = (int)$this->getSetting('dpass_rest_id');
             // Get Time
             $record->create_time = Time::now();
             $record->update_time = Time::now();
