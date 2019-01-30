@@ -125,8 +125,6 @@ class RecordsController extends AppController
             // Append Machine ID
             $record->machine_code = (int)$this->getSetting('dpass_rest_id');
             // Get Time
-            $record->create_time = Time::now();
-            $record->update_time = Time::now();
             $record->time = Time::now();
             // Process the photo upload
             $photoPresented = false;
@@ -145,7 +143,6 @@ class RecordsController extends AppController
                     // append the id number into photo filename
                     $photo->photo_path = $link->staff_id."-".$photo->id.".".$photoType[1]; // TODO change to time?
                     // save the photo information again
-                    $photo->update_time = Time::now();
                     $photoTable->save($photo);
                 } else {
                     //TODO Error creating the photo database entry
@@ -249,8 +246,6 @@ class RecordsController extends AppController
                     $record['machine_code'] = $item->machineId;
                     // Get Time
                     $record['dateTime'] = $item->dateTime;
-                    $record['create_time'] = Time::now();
-                    $record['update_time'] = Time::now();
                     $record['accuracy'] = 100;
                     $dataCheck = $this->Records->newEntity($record);
                     $records[] = $dataCheck;
@@ -361,8 +356,7 @@ class RecordsController extends AppController
                 $this->Records->save($record);
             }
         }
-        $record->update_time = Time::now();
-        $this->Records->save($record);
+
     }
     /**
      * Edit method

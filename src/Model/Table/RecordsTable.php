@@ -44,6 +44,15 @@ class RecordsTable extends Table
         $this->hasMany('Scores', [
             'foreignKey' => 'record_id'
         ]);
+
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
+        ]);
     }
 
     /**
