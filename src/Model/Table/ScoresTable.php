@@ -50,6 +50,15 @@ class ScoresTable extends Table
             'targetForeignKey' => 'photo_id',
             'joinTable' => 'photos_scores'
         ]);
+
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
+        ]);
     }
 
     /**

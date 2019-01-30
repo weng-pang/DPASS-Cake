@@ -311,8 +311,6 @@ class RecordsController extends AppController
         $score->manager_id = (int)$this->getSetting('dpass_system_id');
         $score->score = $this->getMark($scoreName);
         $score->notes = $note;
-        $score->create_time = Time::now();
-        $score->update_time = Time::now();
         $this->Records->Scores->save($score);
     }
 
