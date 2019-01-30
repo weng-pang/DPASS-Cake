@@ -229,12 +229,57 @@ class RecordsController extends AppController
             // Check for API key
             if (array_key_exists('key',$formData) && $this->checkKey($formData['key'])){
                 $content = json_decode($formData['content']);
-
                 // Record Validation
-                // add record accordingly
-                $transaction = $content;
-                // return the record id number
-                $results['transactionId'] = $transaction;
+                $itemValid = true;
+                $i = 0;
+                foreach ($content as $item){
+                    if (!isset($item->id)){
+                        $itemValid = false;
+                        $errorMessage[$i]['id'] = 'Staff id is missing';
+                    } elseif (!is_numeric($item->id)){
+                        $itemValid = false;
+                        $errorMessage[$i]['id'] = 'Staff id should be a number';
+                    }
+                    if (!isset($item->ipAddress)){
+                        $itemValid = false;
+                        $errorMessage[$i]['ipAddress'] = 'IP Address is missing';
+                    }
+                    if (!isset($item->machineId)){
+                        $itemValid = false;
+                        $errorMessage[$i]['machineId'] = 'Machine id is missing';
+                    } elseif (!is_numeric($item->machineId)){
+                        $itemValid = false;
+                        $errorMessage[$i]['machineId'] = 'Machine id should be a number';
+                    }
+                    if (!isset($item->dateTime)){
+                        $itemValid = false;
+                        $errorMessage[$i]['dateTime'] = 'Date Time is missing';
+                    } elseif (!strtotime($item->dateTime)){
+                        $itemValid = false;
+                        $errorMessage[$i]['dateTime'] = 'Date Time is incorrect';
+                    }
+                    $i++;
+                }
+                foreach ($content as $item){
+                    // add record accordingly
+                    if ($itemValid) {
+                        $record = $this->Records->newEntity();
+                        $record->staff_id = $item->id;
+                        $record->http_cf_connecting_ip = $item->ipAddress;
+                        $record->machine_code = $item->machineId;
+                        // Get Time
+                        $record->time = $item->dateTime;
+                        $record->create_time = Time::now();
+                        $record->update_time = Time::now();
+                        $record->accuracy = 100;
+                        $this->Records->save($record); debug($record);
+                        // return the record id number
+                        $results['transactionId'][] = $record->id;
+                    } else {
+                        $errorMessage['error'] = 'One or more of the records are incorrect, or the JSON syntax is wrong';
+                        $this->response = $this->response->withStatus(400);
+                    }
+                }
             } else {
                 // API Key is invalid
                 $errorMessage['error'] = $this->keyError;
@@ -295,7 +340,7 @@ class RecordsController extends AppController
         $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
         $data['entryId'] = 0; // Leave them zero
         $data['portNumber'] = 0;
-        $data['ipAddress'] =
+        $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
             $this->request->getEnv('SERVER_ADDR') == '::1' ?
                 '127.0.0.1' :
                 $this->request->getEnv('SERVER_ADDR');
@@ -306,7 +351,7 @@ class RecordsController extends AppController
             ]);
         $jsonResponse = json_decode($response->getBody()->getContents());
         if (isset($jsonResponse->error)){
-            $record->additional_data =
+            $record->additional_data .=
                 'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
         } else {
             $record->rest_serial = $jsonResponse->transactionId;
