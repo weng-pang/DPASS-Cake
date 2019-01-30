@@ -32,7 +32,7 @@ class AppController extends Controller
     protected $settings;
     protected $marks;
     protected $languages;
-    protected $keyError;
+    protected $keyError = "The API key is missing"; // This is the default message for key error;
 
     /**
      * Initialization hook method.
@@ -130,6 +130,7 @@ class AppController extends Controller
      */
     public function checkKey($key = null)
     {
+
         try {
             $this->loadModel('ApiKeys');
             $apiKey = $this->ApiKeys->find('all')
@@ -144,10 +145,11 @@ class AppController extends Controller
             if ($apiKey->revoked){
                 throw new KeyInvalidException(['reason' => 'Revoked']);
             }
+            $this->keyError = "Key is valid for use";
             return true;
         } catch(Exception $e){
             $this->keyError = $e->getMessage();
-            ;
+            $this->response = $this->response->withStatus(406);
             return false;
         }
     }
@@ -156,5 +158,4 @@ class AppController extends Controller
 class KeyInvalidException extends Exception
 {
     protected $_messageTemplate = 'The API Key is %s';
-    protected $_defaultCode = 500;
 }

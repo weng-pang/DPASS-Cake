@@ -225,15 +225,29 @@ class RecordsController extends AppController
         if ($this->request->is('post')) {
             $formData = $this->request->getData();
             // Check for API key
-            if ($this->checkKey($formData['key'])){
+            if (array_key_exists('key',$formData) && $this->checkKey($formData['key'])){
+                $content = json_decode($formData['content']);
+
+                // Record Validation
                 // add record accordingly
+                $transaction = $content;
+                // return the record id number
+                $results['transactionId'] = $transaction;
             } else {
                 // API Key is invalid
                 $errorMessage['error'] = $this->keyError;
-                $this->set('json',json_encode($errorMessage));
             }
+        } else {
+            $errorMessage['error'] = 'Method not allowed';
+            $this->response = $this->response->withStatus(405);
         }
-
+        if (isset($errorMessage)){
+            // Error messages to be shown here
+            $this->set('json',json_encode($errorMessage));
+        } else {
+            // The record is processed successfully
+            $this->set('json',json_encode($results));
+        }
     }
 
     /**
