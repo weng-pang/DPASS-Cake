@@ -60,6 +60,7 @@ class RecordsTable extends Table
 
         $validator
             ->integer('machine_code')
+            ->naturalNumber('machine_code','Machine id should be a positive number')
             ->allowEmpty('machine_code');
 
         $validator
@@ -100,6 +101,7 @@ class RecordsTable extends Table
         $validator
             ->scalar('http_cf_connecting_ip')
             ->maxLength('http_cf_connecting_ip', 45)
+            ->ip('http_cf_connecting_ip','IP Format is incorrect')
             ->allowEmpty('http_cf_connecting_ip');
 
         $validator
