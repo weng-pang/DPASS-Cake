@@ -245,7 +245,7 @@ class RecordsController extends AppController
                     $record['http_cf_connecting_ip'] = $item->ipAddress;
                     $record['machine_code'] = $item->machineId;
                     // Get Time
-                    $record['dateTime'] = $item->dateTime;
+                    $record['time'] = new Time($item->dateTime);
                     $record['accuracy'] = 100;
                     $dataCheck = $this->Records->newEntity($record);
                     $records[] = $dataCheck;
@@ -267,6 +267,10 @@ class RecordsController extends AppController
                         $this->Records->save($item);
                         // return the record id number
                         $results[]['transactionId'] = $item->id;
+                    }
+                    // Add to DPass REST
+                    if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
+                        $this->addRestRecord($records);
                     }
                 } else {
                     $errorMessage['error'] = 'One or more of the records are incorrect, or the JSON syntax is wrong';
@@ -330,7 +334,7 @@ class RecordsController extends AppController
         foreach ($records as $record){
             $data['id'] = $record->staff_id;
             $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
-            $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
+            $data['machineId'] = $record->machine_code; // This must be a number
             $data['entryId'] = 0; // Leave them zero
             $data['portNumber'] = 0;
             $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
@@ -356,7 +360,6 @@ class RecordsController extends AppController
                 $this->Records->save($record);
             }
         }
-
     }
     /**
      * Edit method
