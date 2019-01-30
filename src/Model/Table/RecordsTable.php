@@ -9,7 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Records Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Staff
+ * @property \App\Model\Table\StaffTable|\Cake\ORM\Association\BelongsTo $Staff
+ * @property \App\Model\Table\ScoresTable|\Cake\ORM\Association\HasMany $Scores
  *
  * @method \App\Model\Entity\Record get($primaryKey, $options = [])
  * @method \App\Model\Entity\Record newEntity($data = null, array $options = [])
@@ -40,10 +41,9 @@ class RecordsTable extends Table
         $this->belongsTo('Staff', [
             'foreignKey' => 'staff_id'
         ]);
-        $this->hasMany('Scores',[
+        $this->hasMany('Scores', [
             'foreignKey' => 'record_id'
         ]);
-
     }
 
     /**
@@ -57,6 +57,14 @@ class RecordsTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
+
+        $validator
+            ->integer('machine_code')
+            ->allowEmpty('machine_code');
+
+        $validator
+            ->integer('rest_serial')
+            ->allowEmpty('rest_serial');
 
         $validator
             ->decimal('longitude')

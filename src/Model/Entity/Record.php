@@ -8,6 +8,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $staff_id
+ * @property int $machine_code
+ * @property int $rest_serial
  * @property float $longitude
  * @property float $latitude
  * @property float $accuracy
@@ -19,6 +21,9 @@ use Cake\ORM\Entity;
  * @property string $http_cookie
  * @property \Cake\I18n\FrozenTime $create_time
  * @property \Cake\I18n\FrozenTime $update_time
+ *
+ * @property \App\Model\Entity\Staff $staff
+ * @property \App\Model\Entity\Score[] $scores
  */
 class Record extends Entity
 {
@@ -34,6 +39,8 @@ class Record extends Entity
      */
     protected $_accessible = [
         'staff_id' => true,
+        'machine_code' => true,
+        'rest_serial' => true,
         'longitude' => true,
         'latitude' => true,
         'accuracy' => true,
@@ -44,6 +51,8 @@ class Record extends Entity
         'http_cf_connecting_ip' => true,
         'http_cookie' => true,
         'create_time' => true,
-        'update_time' => true
+        'update_time' => true,
+        'staff' => true,
+        'scores' => true
     ];
 }

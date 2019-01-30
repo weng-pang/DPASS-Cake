@@ -306,8 +306,8 @@ class RecordsController extends AppController
         if (isset($jsonResponse->error)){
             $record->additional_data =
                 'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
-        } else { //TODO Hardcoded REST transaction id
-            $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
+        } else {
+            $record->rest_serial = $jsonResponse->transactionId;
         }
         $record->update_time = Time::now();
         $this->Records->save($record);
