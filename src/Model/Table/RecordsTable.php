@@ -1,11 +1,12 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
+use Cake\Http\Client;
+use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 /**
  * Records Model
  *
@@ -142,4 +143,55 @@ class RecordsTable extends Table
 
         return $rules;
     }
+
+    /**
+     * addRestRecord method
+     *
+     * This is a fallback and backup measure for this system
+     * By using this method, the record is 'copied' into the DPASS REST system
+     *
+     * Note this method does not copy scores into DPASS REST.
+     * Note also this method does not check redundant record at DPASS REST,
+     * it simply copies records only. Please use with caution.
+     *
+     * @param array $records
+     */
+    public function addRestRecord($records){
+        $dpassRest = new Client();
+        $request = Router::getRequest(); // https://stackoverflow.com/a/21139714
+        $settings = TableRegistry::getTableLocator()->get('Settings'); https://book.cakephp.org/3.0/en/orm.html#quick-example
+        // Prepare the information
+        foreach ($records as $record){
+            $data['id'] = $record->staff_id;
+            $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
+            $data['machineId'] = $record->machine_code; // This must be a number
+            $data['entryId'] = 0; // Leave them zero
+            $data['portNumber'] = 0;
+            $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
+                $request->getEnv('SERVER_ADDR') == '::1' ?
+                    '127.0.0.1' :
+                    $request->getEnv('SERVER_ADDR');
+            $content[] = $data;
+        }
+        $response = $dpassRest->post($settings->getSetting('dpass_rest_add_address'),
+            [
+                'key' => $settings->getSetting('dpass_rest_key'),
+                'content' => json_encode($content)
+            ]);
+        $jsonResponse = json_decode($response->getBody()->getContents());
+
+        $i = 0;
+        foreach ($records as $record) {
+            if (isset($jsonResponse->error)){
+                $record->additional_data .=
+                    'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
+            } else {
+                $record->rest_serial = $jsonResponse[$i++]->transactionId;
+            }
+            $this->save($record);
+        }
+
+    }
+
+
 }

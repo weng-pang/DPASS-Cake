@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use Cake\Http\Client;
 use Cake\I18n\Time;
 use Cake\Datasource\Exception\RecordNotFoundException;
 /**
@@ -169,7 +168,7 @@ class RecordsController extends AppController
                 }
                 // Add to DPass REST
                 if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                    $this->addRestRecord([$record]);
+                    $this->Records->addRestRecord([$record]);
                 }
                 if (is_null($language)){
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code]);
@@ -269,7 +268,7 @@ class RecordsController extends AppController
                     }
                     // Add to DPass REST
                     if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                        $this->addRestRecord($records);
+                        $this->Records->addRestRecord($records);
                     }
                 } else {
                     $errorMessage['error'] = 'One or more of the records are incorrect, or the JSON syntax is wrong';
@@ -313,50 +312,6 @@ class RecordsController extends AppController
         $this->Records->Scores->save($score);
     }
 
-    /**
-     * addRestRecord method
-     *
-     * This is a fallback and backup measure for this system
-     * By using this method, the record is 'copied' into the DPASS REST system
-     *
-     * Note this method does not copy scores into DPASS REST.
-     * Note also this method does not check redundant record at DPASS REST,
-     * it simply copies records only. Please use with caution.
-     *
-     * @param array $records
-     */
-    private function addRestRecord($records){
-        $dpassRest = new Client();
-        // Prepare the information
-        foreach ($records as $record){
-            $data['id'] = $record->staff_id;
-            $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
-            $data['machineId'] = $record->machine_code; // This must be a number
-            $data['entryId'] = 0; // Leave them zero
-            $data['portNumber'] = 0;
-            $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
-                $this->request->getEnv('SERVER_ADDR') == '::1' ?
-                    '127.0.0.1' :
-                    $this->request->getEnv('SERVER_ADDR');
-            $content[] = $data;
-        }
-        $response = $dpassRest->post($this->settings->getSetting('dpass_rest_add_address'),
-            [
-                'key' => $this->settings->getSetting('dpass_rest_key'),
-                'content' => json_encode($content)
-            ]);
-        $jsonResponse = json_decode($response->getBody()->getContents());
-        if (isset($jsonResponse->error)){
-            $record->additional_data .=
-                'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
-        } else {
-            $i = 0;
-            foreach ($records as $record) {
-                $record->rest_serial = $jsonResponse[$i++]->transactionId;
-                $this->Records->save($record);
-            }
-        }
-    }
     /**
      * Edit method
      *
