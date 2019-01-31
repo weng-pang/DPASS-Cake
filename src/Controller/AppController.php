@@ -70,7 +70,7 @@ class AppController extends Controller
         $this->marks = $this->loadModel('Marks');
         $this->languages = $this->loadModel('Languages');
         // Use the default language
-        $default = (int)$this->settings->find('all')->where(['keyword' => 'default_language'])->first()['content'];
+        $default = (int)$this->settings->getSetting('default_language');
         $code = $this->languages->get($default)['code'];
         I18n::setLocale($code); // using the default code
         return parent::beforeFilter($event);
