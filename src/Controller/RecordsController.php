@@ -168,7 +168,7 @@ class RecordsController extends AppController
                 }
                 // Add to DPass REST
                 if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                    $this->Records->addRestRecord([$record]);
+                    $this->Records->addRestRecords([$record]);
                 }
                 if (is_null($language)){
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code]);
@@ -268,7 +268,7 @@ class RecordsController extends AppController
                     }
                     // Add to DPass REST
                     if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                        $this->Records->addRestRecord($records);
+                        $this->Records->addRestRecords($records);
                     }
                 } else {
                     $errorMessage['error'] = 'One or more of the records are incorrect, or the JSON syntax is wrong';

@@ -156,42 +156,45 @@ class RecordsTable extends Table
      *
      * @param array $records
      */
-    public function addRestRecord($records){
-        $dpassRest = new Client();
-        $request = Router::getRequest(); // https://stackoverflow.com/a/21139714
-        $settings = TableRegistry::getTableLocator()->get('Settings'); https://book.cakephp.org/3.0/en/orm.html#quick-example
-        // Prepare the information
-        foreach ($records as $record){
-            $data['id'] = $record->staff_id;
-            $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
-            $data['machineId'] = $record->machine_code; // This must be a number
-            $data['entryId'] = 0; // Leave them zero
-            $data['portNumber'] = 0;
-            $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
-                $request->getEnv('SERVER_ADDR') == '::1' ?
-                    '127.0.0.1' :
-                    $request->getEnv('SERVER_ADDR');
-            $content[] = $data;
-        }
-        $response = $dpassRest->post($settings->getSetting('dpass_rest_add_address'),
-            [
-                'key' => $settings->getSetting('dpass_rest_key'),
-                'content' => json_encode($content)
-            ]);
-        $jsonResponse = json_decode($response->getBody()->getContents());
-
-        $i = 0;
-        foreach ($records as $record) {
-            if (isset($jsonResponse->error)){
-                $record->additional_data .=
-                    'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
-            } else {
-                $record->rest_serial = $jsonResponse[$i++]->transactionId;
+    public function addRestRecords(array $records){
+        if (sizeof($records) > 0) {
+            $dpassRest = new Client();
+            $request = Router::getRequest(); // https://stackoverflow.com/a/21139714
+            $settings = TableRegistry::getTableLocator()->get('Settings'); https://book.cakephp.org/3.0/en/orm.html#quick-example
+            // Prepare the information
+            foreach ($records as $record){
+                $data['id'] = $record->staff_id;
+                $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                $data['machineId'] = $record->machine_code; // This must be a number
+                $data['entryId'] = 0; // Leave them zero
+                $data['portNumber'] = 0;
+                $data['ipAddress'] = '0.0.0.0'; // Default IP Address value
+                if (!is_null($request)){
+                    $data['ipAddress'] = // The DPASS Rest accepts ipv4 address only
+                        $request->getEnv('SERVER_ADDR') == '::1' ?
+                            '127.0.0.1' :
+                            $request->getEnv('SERVER_ADDR');
+                }
+                $content[] = $data;
             }
-            $this->save($record);
+            $response = $dpassRest->post($settings->getSetting('dpass_rest_add_address'),
+                [
+                    'key' => $settings->getSetting('dpass_rest_key'),
+                    'content' => json_encode($content)
+                ]);
+            $jsonResponse = json_decode($response->getBody()->getContents());
+
+            $i = 0;
+            foreach ($records as $record) {
+                if (isset($jsonResponse->error)){
+                    $record->additional_data .=
+                        'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
+                } else {
+                    $record->rest_serial = $jsonResponse[$i++]->transactionId;
+                }
+                $this->save($record);
+            }
         }
-
+        // It will not do anything if there is nothing to put in
     }
-
-
 }
