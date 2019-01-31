@@ -21,6 +21,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Staff patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Staff[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Staff findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class StaffTable extends Table
 {
@@ -49,6 +51,14 @@ class StaffTable extends Table
             'foreignKey' => 'staff_id',
             'targetForeignKey' => 'organisation_id',
             'joinTable' => 'organisations_staff'
+        ]);
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
         ]);
     }
 

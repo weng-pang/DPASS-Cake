@@ -21,6 +21,8 @@ use Cake\ORM\TableRegistry;
  * @method \App\Model\Entity\Record patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Record[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Record findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class RecordsTable extends Table
 {

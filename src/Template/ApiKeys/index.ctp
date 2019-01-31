@@ -17,7 +17,8 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('key') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('create_time') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('update_time') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('expire') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('revoked') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('comment') ?></th>
@@ -29,7 +30,8 @@
             <tr>
                 <td><?= $this->Number->format($apiKey->id) ?></td>
                 <td><?= h($apiKey->key) ?></td>
-                <td><?= h($apiKey->created) ?></td>
+                <td><?= h($apiKey->create_time) ?></td>
+                <td><?= h($apiKey->update_time) ?></td>
                 <td><?= h($apiKey->expire) ?></td>
                 <td><?= h($apiKey->revoked) ?></td>
                 <td><?= h($apiKey->comment) ?></td>

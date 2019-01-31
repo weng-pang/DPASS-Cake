@@ -21,6 +21,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Score patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Score[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Score findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ScoresTable extends Table
 {

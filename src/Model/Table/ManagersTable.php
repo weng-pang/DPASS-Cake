@@ -34,6 +34,14 @@ class ManagersTable extends Table
         $this->setTable('managers');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
+        ]);
     }
 
     /**

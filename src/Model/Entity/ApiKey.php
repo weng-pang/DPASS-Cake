@@ -8,7 +8,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $key
- * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $create_time
+ * @property \Cake\I18n\FrozenTime $update_time
  * @property \Cake\I18n\FrozenTime $expire
  * @property bool $revoked
  * @property string $comment
@@ -27,7 +28,8 @@ class ApiKey extends Entity
      */
     protected $_accessible = [
         'key' => true,
-        'created' => true,
+        'create_time' => true,
+        'update_time' => true,
         'expire' => true,
         'revoked' => true,
         'comment' => true

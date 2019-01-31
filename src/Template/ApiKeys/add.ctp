@@ -16,6 +16,8 @@
         <legend><?= __('Add Api Key') ?></legend>
         <?php
             echo $this->Form->control('key');
+            echo $this->Form->control('create_time');
+            echo $this->Form->control('update_time', ['empty' => true]);
             echo $this->Form->control('expire');
             echo $this->Form->control('revoked');
             echo $this->Form->control('comment');

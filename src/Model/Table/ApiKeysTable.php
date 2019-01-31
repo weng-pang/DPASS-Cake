@@ -36,8 +36,14 @@ class ApiKeysTable extends Table
         $this->setTable('api_keys');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-
-        $this->addBehavior('Timestamp');
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -58,6 +64,15 @@ class ApiKeysTable extends Table
             ->requirePresence('key', 'create')
             ->notEmpty('key')
             ->add('key', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
+            ->dateTime('create_time')
+            ->requirePresence('create_time', 'create')
+            ->notEmpty('create_time');
+
+        $validator
+            ->dateTime('update_time')
+            ->allowEmpty('update_time');
 
         $validator
             ->dateTime('expire')

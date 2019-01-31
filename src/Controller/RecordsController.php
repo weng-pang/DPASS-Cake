@@ -133,7 +133,6 @@ class RecordsController extends AppController
                // Get a new placeholder for photo
                 $photoTable = $this->Records->Scores->Photos;
                 $photo = $photoTable->newEntity();
-                $photo->create_time = Time::now();
                 // Store photo
                 if ($photoTable->save($photo)){
                     // Store photo information into system

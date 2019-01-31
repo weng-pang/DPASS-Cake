@@ -29,8 +29,12 @@
             <td><?= $this->Number->format($apiKey->id) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($apiKey->created) ?></td>
+            <th scope="row"><?= __('Create Time') ?></th>
+            <td><?= h($apiKey->create_time) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Update Time') ?></th>
+            <td><?= h($apiKey->update_time) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Expire') ?></th>
