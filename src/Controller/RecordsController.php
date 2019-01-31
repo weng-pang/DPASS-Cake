@@ -13,7 +13,6 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  */
 class RecordsController extends AppController
 {
-
     /**
      * Index method
      *
@@ -92,7 +91,7 @@ class RecordsController extends AppController
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
-            ->limit((int)$this->getSetting('staffadd_view_limit'));
+            ->limit((int)$this->settings->getSetting('staffadd_view_limit'));
         // Fetch the organisation the staff belongs to
         $staff = $this->Records->Staff
             ->find('all',['contain'=>'Organisations'])
@@ -123,7 +122,7 @@ class RecordsController extends AppController
                 $locationPresented = false;
             }
             // Append Machine ID
-            $record->machine_code = (int)$this->getSetting('dpass_rest_id');
+            $record->machine_code = (int)$this->settings->getSetting('dpass_rest_id');
             // Get Time
             $record->time = Time::now();
             // Process the photo upload
@@ -169,7 +168,7 @@ class RecordsController extends AppController
                     $this->giveScore($record,'staff_add_location',"Location is presented.");
                 }
                 // Add to DPass REST
-                if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
+                if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
                     $this->addRestRecord([$record]);
                 }
                 if (is_null($language)){
@@ -186,7 +185,7 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('record',$record);
-        $this->set('recordLimit',(int)$this->getSetting('staffadd_view_limit'));
+        $this->set('recordLimit',(int)$this->settings->getSetting('staffadd_view_limit'));
     }
 
     public function staffaddCompleted($code = null, $language = null){
@@ -202,7 +201,7 @@ class RecordsController extends AppController
             ->where(['link' => $code])
             ->firstOrFail();
         // Fetching the latest attendance records
-        $viewLimit = (int)$this->getSetting('staffadd_view_limit') + 1;  // Adding one more to highlight the latest one
+        $viewLimit = (int)$this->settings->getSetting('staffadd_view_limit') + 1;  // Adding one more to highlight the latest one
         $records = $this->Records
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
@@ -269,7 +268,7 @@ class RecordsController extends AppController
                         $results[]['transactionId'] = $item->id;
                     }
                     // Add to DPass REST
-                    if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
+                    if ($this->settings->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
                         $this->addRestRecord($records);
                     }
                 } else {
@@ -308,7 +307,7 @@ class RecordsController extends AppController
     private function giveScore($record, $scoreName, $note){
         $score = $this->Records->Scores->newEntity();
         $score->record_id = $record->id;
-        $score->manager_id = (int)$this->getSetting('dpass_system_id');
+        $score->manager_id = (int)$this->settings->getSetting('dpass_system_id');
         $score->score = $this->getMark($scoreName);
         $score->notes = $note;
         $this->Records->Scores->save($score);
@@ -341,10 +340,9 @@ class RecordsController extends AppController
                     $this->request->getEnv('SERVER_ADDR');
             $content[] = $data;
         }
-
-        $response = $dpassRest->post($this->getSetting('dpass_rest_add_address'),
+        $response = $dpassRest->post($this->settings->getSetting('dpass_rest_add_address'),
             [
-                'key' => $this->getSetting('dpass_rest_key'),
+                'key' => $this->settings->getSetting('dpass_rest_key'),
                 'content' => json_encode($content)
             ]);
         $jsonResponse = json_decode($response->getBody()->getContents());

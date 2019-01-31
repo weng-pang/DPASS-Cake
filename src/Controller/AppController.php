@@ -84,22 +84,10 @@ class AppController extends Controller
      *
      * @param string $language
      */
-    protected function changeLanguage($language){
+    public function changeLanguage($language){
         $code = $this->languages->get($language)['code'];
         I18n::setLocale($code);
         $this->set('language',$language);
-    }
-
-    /**
-     *  Find Setting Method
-     *  The setting from the database is obtained by providing the keyword.
-     *
-     * @param string $keyword
-     * @return string
-     */
-    protected function getSetting($keyword){
-
-        return $this->settings->find('all')->where(['keyword' => $keyword])->first()['content'];
     }
 
     /**
@@ -109,7 +97,7 @@ class AppController extends Controller
      * @param string $keyword
      * @return int
      */
-    protected function getMark($keyword){
+    public function getMark($keyword){
 
         return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
     }
