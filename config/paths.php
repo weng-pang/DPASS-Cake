@@ -92,4 +92,4 @@ define('CAKE', CORE_PATH . 'src' . DS);
 /**
  * Path to the backup / installation schema directory
  */
-define('SCHEMA_DIR', CONFIG . 'schema' . DS);
+define('BACKUP_SCHEMA_DIR', CONFIG . 'schema' . DS . 'backup' . DS);

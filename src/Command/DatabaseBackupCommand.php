@@ -32,7 +32,10 @@ class DatabaseBackupCommand extends Command
         $db = $config['database'];
         $dateTime = Time::now();
         ;
-        $filePath = SCHEMA_DIR . $config['file_prefix'] . DOT . $dateTime->format($config['file_timestamp_format']) . DOT . $config['file_type'];
+        $filePath = BACKUP_SCHEMA_DIR .
+            $config['file_prefix'] . DOT .
+            $dateTime->format($config['file_timestamp_format']) . DOT .
+            $config['file_type'];
         $scriptFile = new File($filePath);
 
         $process = new Process([
