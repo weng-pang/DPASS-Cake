@@ -69,12 +69,12 @@ class DatabaseBackupCommand extends Command
 -- ===============================================================================
 
 -- -----------------------------------------------------------------------------------------
--- Output from "mysqldump --add-drop-table"
+-- Output from "mysqldump --add-drop-table" Version: 0.2 01/02/2019
 -- -----------------------------------------------------------------------------------------
 
 $dumpedData
 SQL;
-
+        $io->verbose($newSqlScript);
         $scriptFile->write($newSqlScript);
         $io->success("Wrote " . strlen($newSqlScript) . " bytes of output to " );
         $io->success($filePath);
