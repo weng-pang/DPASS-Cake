@@ -1,46 +1,39 @@
 <?php
-namespace App\Shell;
+namespace App\Command;
 
-use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\File;
-use Cake\I18n\FrozenTime;
-use Cake\ORM\TableRegistry;
 use Symfony\Component\Process\Process;
+use Cake\Console\Arguments;
+use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleOptionParser;
+use Cake\I18n\Time;
 
 /**
- * BackupDatabase shell command.
- * This code is taken from Camelot IE Demonstration System, developed by Faculty of IT, Monash University
+ * BackupDatabase command.
+ * This SQL script generation code is taken from Camelot IE Demonstration System, developed by Faculty of IT, Monash University
  */
-class BackupDatabaseShell extends Shell
+class DatabaseBackupCommand extends Command
 {
 
-    /**
-     *
-     * Manage the available sub-commands along with their arguments and help
-     *
-     * @see http://book.cakephp.org/3.0/en/console-and-shells.html#configuring-options-and-generating-help
-     *
-     * @return \Cake\Console\ConsoleOptionParser
-     */
-    public function getOptionParser()
-    {
-        $parser = parent::getOptionParser();
 
+    protected function buildOptionParser(ConsoleOptionParser $parser)
+    {
+        $parser->setDescription('This command creates a backup sql file into config/schema');
         return $parser;
     }
 
-    /**
-     * main() method.
-     *
-     * @return bool|int|null Success or error code.
-     */
-    public function main()
+
+    public function execute(Arguments $args, ConsoleIo $io)
     {
-        $connection = ConnectionManager::get('default'); // TODO DRY
+        $connection = ConnectionManager::get('default');
         $config = $connection->config();
         $db = $config['database'];
-        $scriptFile = new File(SCHEMA_DIR . $config['file_prefix'] . $config['file_type']); //TODO Add multiple file support
+        $dateTime = Time::now();
+        ;
+        $filePath = SCHEMA_DIR . $config['file_prefix'] . DOT . $dateTime->format($config['file_timestamp_format']) . DOT . $config['file_type'];
+        $scriptFile = new File($filePath);
 
         $process = new Process([
             'mysqldump',
@@ -50,19 +43,19 @@ class BackupDatabaseShell extends Shell
             '--add-drop-table',
             $db,
         ]);
-
+        $io->out('Creating a backup sql file');
         $process->run();
         $dumpedData = $process->getOutput();
         if ($process->getExitCode() !== 0) {
-            $this->err("Error dumping tables");
+            $io->error("Error dumping tables");
             $error = $process->getErrorOutput();
             if ($error) {
-                $this->err($error);
+                $io->error($error);
             }
 
             return false;
         } elseif (!trim($dumpedData)) {
-            $this->err("mysqldump completed but returned no data");
+            $io->error("mysqldump completed but returned no data");
 
             return false;
         }
@@ -79,10 +72,10 @@ class BackupDatabaseShell extends Shell
 $dumpedData
 SQL;
 
-        $this->out($newSqlScript);
         $scriptFile->write($newSqlScript);
-        $this->success("Wrote " . strlen($newSqlScript) . " bytes of output to " . $scriptFile->path);
-        $this->out('Done!');
+        $io->success("Wrote " . strlen($newSqlScript) . " bytes of output to " );
+        $io->success($filePath);
+        $io->out('Done!');
 
         return true;
     }

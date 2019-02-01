@@ -20,6 +20,11 @@ if (!defined('DS')) {
 }
 
 /**
+ * The Symbol DOT . for path use
+ */
+define('DOT','.');
+
+/**
  * These defines should only be edited if you have cake installed in
  * a directory layout other than the way it is distributed.
  * When using custom settings be sure to use the DS and do not add a trailing DS.
