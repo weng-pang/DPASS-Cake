@@ -17,13 +17,11 @@ use Cake\I18n\Time;
 class DatabaseBackupCommand extends Command
 {
 
-
     protected function buildOptionParser(ConsoleOptionParser $parser)
     {
         $parser->setDescription('This command creates a backup sql file into config/schema');
         return $parser;
     }
-
 
     public function execute(Arguments $args, ConsoleIo $io)
     {
@@ -69,7 +67,7 @@ class DatabaseBackupCommand extends Command
 -- =========================================================================================
 
 -- -----------------------------------------------------------------------------------------
--- Output from "mysqldump --add-drop-table" Version: 0.2 01/02/2019
+-- Output from "mysqldump --add-drop-table" Version: 0.3 02/02/2019
 -- -----------------------------------------------------------------------------------------
 
 $dumpedData
