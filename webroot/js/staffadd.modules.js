@@ -9,7 +9,6 @@ function getLocation(){
         navigator.geolocation.getCurrentPosition(showPosition, showError);
 
     } else {
-        // TODO populate the warning message
         locationDisplay.innerHTML = notSupported;
         locationFail();
     }
@@ -63,7 +62,7 @@ function checkPhotoUpload(){
     }
 }
 
-// Block UI
+// Block UI - Wait screen for record uploading work
 let blockCss = {
     border: 'none',
     padding: '15px',
@@ -73,3 +72,32 @@ let blockCss = {
     opacity: .5,
     color: '#fff'
 };
+
+$("#record-form").submit( function (){
+    // Screen 1
+    $.blockUI({
+        message : wait,
+        css : blockCss,
+        fadeOut : 0 // No fade out
+    });
+    setTimeout( function(){ // https://stackoverflow.com/a/1836140
+        // Screen 2
+            $.blockUI({
+                message : loading,
+                css : blockCss,
+                fadeIn : 0, // No fade in & out
+                fadeOut : 0
+            });
+        }
+        , waitTime );
+    setTimeout( function(){ // https://stackoverflow.com/a/1836140
+            // Screen 3
+            $.blockUI({
+                message : $('#long-loading'),
+                css : blockCss,
+                fadeIn : 0, // No fade in & out
+                fadeOut : 0
+            });
+        }
+        , waitTime * 2 ); // Double the wait time as screen 2
+});

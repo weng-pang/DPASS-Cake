@@ -184,6 +184,7 @@ class RecordsController extends AppController
         $this->set('records',($records));
         $this->set('record',$record);
         $this->set('recordLimit',(int)$this->settings->getSettings()->staffadd_view_limit);
+        $this->set('waitTime',(int)$this->settings->getSettings()->staffadd_wait_time);
     }
 
     public function staffaddCompleted($code = null, $language = null){

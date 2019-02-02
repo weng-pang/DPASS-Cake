@@ -47,8 +47,12 @@
     </div>
 </div>
 
-<div id="no-photo-confirm" title="<?=__('Photo is not attached')?>" style="display: none">
+<div id="no-photo-confirm" title="<?=__('Photo is not attached')?>" style="display:none">
     <p><?=__('Photo is not attached. Are you sure to continue?')?></p>
+</div>
+<div id="long-loading" style="display:none">
+    <p><?=__('Still Uploading......?')?></p>
+    <a href="#" class="btn btn-info btn-record" onclick="window.location.reload(true);"><?=__('Retry again')?></a>
 </div>
 <?= $this->Html->script('staffadd.modules.min') ?>
 <script>
@@ -60,7 +64,8 @@
     let unknown = " <?=__('An unknown error occurred.')?>:";
 
     let wait = '<?=__('Please Wait')?>';
-    let loading = "<?=__('Still Loading...')?>";
+    let loading = "<?=__('Still Uploading...')?>";
+    let waitTime = <?= $waitTime?>;
 
     $( function() {
         $( "#no-photo-confirm" ).dialog({
@@ -79,23 +84,6 @@
             }
         });
     } );
-
-    $("#record-form").submit( function (){
-        $.blockUI({
-            message : wait,
-            css : blockCss,
-            fadeOut : 0 // No fade out
-        });
-        setTimeout( function(){
-                $.blockUI({
-                    message : loading,
-                    css : blockCss,
-                    fadeIn : 0, // No fade in & out
-                    fadeOut : 0
-                });
-            }
-            ,1000); //TODO Apply the dynamic setting
-    });
 
     getLocation();
 </script>
