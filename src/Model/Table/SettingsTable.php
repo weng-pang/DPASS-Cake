@@ -9,6 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Settings Model
  *
+ * @property \App\Model\Table\LanguagesTable|\Cake\ORM\Association\BelongsTo $Languages
+ * @property \App\Model\Table\ManagersTable|\Cake\ORM\Association\BelongsTo $Managers
+ *
  * @method \App\Model\Entity\Setting get($primaryKey, $options = [])
  * @method \App\Model\Entity\Setting newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Setting[] newEntities(array $data, array $options = [])
@@ -34,6 +37,13 @@ class SettingsTable extends Table
         $this->setTable('settings');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('Languages', [
+            'foreignKey' => 'language_id'
+        ]);
+        $this->belongsTo('Managers', [
+            'foreignKey' => 'manager_id'
+        ]);
     }
 
     /**
@@ -61,6 +71,32 @@ class SettingsTable extends Table
             ->allowEmpty('content');
 
         $validator
+            ->integer('dpass_rest_enabled')
+            ->allowEmpty('dpass_rest_enabled');
+
+        $validator
+            ->integer('dpass_rest_code')
+            ->allowEmpty('dpass_rest_code');
+
+        $validator
+            ->scalar('dpass_rest_add_address')
+            ->maxLength('dpass_rest_add_address', 100)
+            ->allowEmpty('dpass_rest_add_address');
+
+        $validator
+            ->scalar('dpass_rest_key')
+            ->maxLength('dpass_rest_key', 100)
+            ->allowEmpty('dpass_rest_key');
+
+        $validator
+            ->integer('staffadd_wait_time')
+            ->allowEmpty('staffadd_wait_time');
+
+        $validator
+            ->integer('staffadd_view_limit')
+            ->allowEmpty('staffadd_view_limit');
+
+        $validator
             ->dateTime('create_time')
             ->requirePresence('create_time', 'create')
             ->notEmpty('create_time');
@@ -83,6 +119,8 @@ class SettingsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['keyword']));
+        $rules->add($rules->existsIn(['language_id'], 'Languages'));
+        $rules->add($rules->existsIn(['manager_id'], 'Managers'));
 
         return $rules;
     }
