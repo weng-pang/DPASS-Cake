@@ -35,7 +35,7 @@ class SettingsTable extends Table
         parent::initialize($config);
 
         $this->setTable('settings');
-        $this->setDisplayField('id');
+        $this->setDisplayField('keyword');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Languages', [
@@ -43,6 +43,15 @@ class SettingsTable extends Table
         ]);
         $this->belongsTo('Managers', [
             'foreignKey' => 'manager_id'
+        ]);
+
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
         ]);
     }
 
@@ -66,12 +75,18 @@ class SettingsTable extends Table
             ->add('keyword', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
+            ->boolean('enabled')
+            ->requirePresence('enabled', 'create')
+            ->notEmpty('enabled');
+
+        $validator
             ->scalar('content')
             ->maxLength('content', 5000)
             ->allowEmpty('content');
 
         $validator
             ->integer('dpass_rest_enabled')
+            ->requirePresence('enabled', 'create')
             ->allowEmpty('dpass_rest_enabled');
 
         $validator
@@ -98,13 +113,11 @@ class SettingsTable extends Table
 
         $validator
             ->dateTime('create_time')
-            ->requirePresence('create_time', 'create')
-            ->notEmpty('create_time');
+            ->allowEmpty('create_time');
 
         $validator
             ->dateTime('update_time')
-            ->requirePresence('update_time', 'create')
-            ->notEmpty('update_time');
+            ->allowEmpty('update_time');
 
         return $validator;
     }
@@ -126,14 +139,13 @@ class SettingsTable extends Table
     }
 
     /**
-     *  Find Setting Method
-     *  The setting from the database is obtained by providing the keyword.
+     * Find Setting Method
+     * The Settings from the database is obtained.
+     * The first enabled Settings set to be returned
      *
-     * @param string $keyword
-     * @return string
+     * @return array|\Cake\Datasource\EntityInterface|null
      */
-    public function getSetting($keyword){
-
-        return $this->find('all')->where(['keyword' => $keyword])->first()['content'];
+    public function getSettings(){
+        return $this->find('all')->where(['enabled' => true])->first();
     }
 }

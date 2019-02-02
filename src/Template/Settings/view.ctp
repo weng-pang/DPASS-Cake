@@ -72,5 +72,9 @@
             <th scope="row"><?= __('Update Time') ?></th>
             <td><?= h($setting->update_time) ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Enabled') ?></th>
+            <td><?= $setting->enabled ? __('Yes') : __('No'); ?></td>
+        </tr>
     </table>
 </div>

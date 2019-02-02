@@ -8,10 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $keyword
+ * @property bool $enabled
  * @property string $content
  * @property int $language_id
  * @property int $manager_id
- * @property int $dpass_rest_enabled
+ * @property bool $dpass_rest_enabled
  * @property int $dpass_rest_code
  * @property string $dpass_rest_add_address
  * @property string $dpass_rest_key
@@ -37,6 +38,7 @@ class Setting extends Entity
      */
     protected $_accessible = [
         'keyword' => true,
+        'enabled' => true,
         'content' => true,
         'language_id' => true,
         'manager_id' => true,

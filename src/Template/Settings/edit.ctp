@@ -26,17 +26,16 @@
         <legend><?= __('Edit Setting') ?></legend>
         <?php
             echo $this->Form->control('keyword');
+            echo $this->Form->control('enabled');
             echo $this->Form->control('content');
-            echo $this->Form->control('language_id', ['options' => $languages, 'empty' => true]);
-            echo $this->Form->control('manager_id', ['options' => $managers, 'empty' => true]);
+            echo $this->Form->control('language_id', ['options' => $languages, 'empty' => false]);
+            echo $this->Form->control('manager_id', ['options' => $managers, 'empty' => false]);
             echo $this->Form->control('dpass_rest_enabled');
             echo $this->Form->control('dpass_rest_code');
             echo $this->Form->control('dpass_rest_add_address');
             echo $this->Form->control('dpass_rest_key');
             echo $this->Form->control('staffadd_wait_time');
             echo $this->Form->control('staffadd_view_limit');
-            echo $this->Form->control('create_time');
-            echo $this->Form->control('update_time');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

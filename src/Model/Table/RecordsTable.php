@@ -179,9 +179,9 @@ class RecordsTable extends Table
                 }
                 $content[] = $data;
             }
-            $response = $dpassRest->post($settings->getSetting('dpass_rest_add_address'),
+            $response = $dpassRest->post($settings->getSettings()->dpass_rest_add_address,
                 [
-                    'key' => $settings->getSetting('dpass_rest_key'),
+                    'key' => $settings->getSettings()->dpass_rest_key,
                     'content' => json_encode($content)
                 ]);
             $jsonResponse = json_decode($response->getBody()->getContents());

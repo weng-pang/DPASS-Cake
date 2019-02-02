@@ -54,8 +54,8 @@ msgstr "再記錄考勤"
 msgid "Please Wait"
 msgstr "請等候"
 
-msgid ""
-msgstr ""
+msgid "The setting has been saved."
+msgstr "設定已儲存"
 
 msgid ""
 msgstr ""

@@ -21,6 +21,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('keyword') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('enabled') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('content') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('language_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('manager_id') ?></th>
@@ -40,6 +41,7 @@
             <tr>
                 <td><?= $this->Number->format($setting->id) ?></td>
                 <td><?= h($setting->keyword) ?></td>
+                <td><?= h($setting->enabled) ?></td>
                 <td><?= h($setting->content) ?></td>
                 <td><?= $setting->has('language') ? $this->Html->link($setting->language->id, ['controller' => 'Languages', 'action' => 'view', $setting->language->id]) : '' ?></td>
                 <td><?= $setting->has('manager') ? $this->Html->link($setting->manager->id, ['controller' => 'Managers', 'action' => 'view', $setting->manager->id]) : '' ?></td>
