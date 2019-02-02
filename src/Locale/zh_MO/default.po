@@ -51,8 +51,8 @@ msgstr "成功記錄考勤"
 msgid "Report your attendance again"
 msgstr "再記錄考勤"
 
-msgid ""
-msgstr ""
+msgid "Please Wait"
+msgstr "請等候"
 
 msgid ""
 msgstr ""
