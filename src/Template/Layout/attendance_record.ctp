@@ -24,9 +24,9 @@
     <!-- Custom fonts for this template-->
       <?= $this->Html->css('font-awesome.min') ?>
     <!-- Custom styles for this template-->
-      <?= $this->Html->css('sb-admin-2.min') ?>
+      <?= $this->Html->css('sb-admin-2-3.3.7.min') ?>
       <?= $this->Html->css('jquery-ui.min') ?>
-      <?= $this->Html->css('attendance_record') ?>
+      <?= $this->Html->css('attendance_record.min') ?>
 
       <?= $this->fetch('script') ?>
       <!-- Bootstrap core JavaScript-->
