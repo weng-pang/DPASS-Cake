@@ -9,6 +9,7 @@
 # Project specific files #
 ##########################
 /photos/*
+/config/schema/backup/database.*
 
 # OS generated files #
 ######################

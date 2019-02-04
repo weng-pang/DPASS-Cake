@@ -35,7 +35,7 @@ class DatabaseResetCommand extends Command
         $nameList = array();
         // Find all relevant files from the directory
         // https://stackoverflow.com/questions/2922954/getting-the-names-of-all-files-in-a-directory-with-php
-        foreach(glob( BACKUP_SCHEMA_DIR . $config['file_prefix'] . DOT . '*' . DOT . $config['file_type']) as $file){
+        foreach(glob( BACKUP_SCHEMA_DIR . $config['file_prefix'] . '*' . DOT . $config['file_type']) as $file){
             $fileList[] = $file;
             $allNames = explode( DS , $file);
             $nameList[] = $allNames[sizeof($allNames) - 1];
