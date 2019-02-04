@@ -1,8 +1,8 @@
 <?php
 namespace App\Controller;
 
-use Cake\Http\Client;
 use Cake\I18n\Time;
+use Cake\Datasource\Exception\RecordNotFoundException;
 /**
  * Records Controller
  *
@@ -12,7 +12,6 @@ use Cake\I18n\Time;
  */
 class RecordsController extends AppController
 {
-
     /**
      * Index method
      *
@@ -50,15 +49,19 @@ class RecordsController extends AppController
     {
         $record = $this->Records->newEntity();
         if ($this->request->is('post')) {
-            $record = $this->Records->patchEntity($record, $this->request->getData());
+            $formData = $this->request->getData();
+            $formData['staff_id'] = 500;
+            debug($formData);
+            $record = $this->Records->patchEntity($record, $formData); debug($record);
             if ($this->Records->save($record)) {
                 $this->Flash->success(__('The record has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+//                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The record could not be saved. Please, try again.'));
         }
-        $this->set(compact('record'));
+        $staff = $this->Records->Staff->find('list', ['limit' => 200]);
+        $this->set(compact('record','staff'));
     }
 
     /**
@@ -87,7 +90,7 @@ class RecordsController extends AppController
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
             ->order(['time'=>'DESC'])
-            ->limit((int)$this->getSetting('staffadd_view_limit'));
+            ->limit((int)$this->settings->getSettings()->staffadd_view_limit);
         // Fetch the organisation the staff belongs to
         $staff = $this->Records->Staff
             ->find('all',['contain'=>'Organisations'])
@@ -117,9 +120,9 @@ class RecordsController extends AppController
             } else {
                 $locationPresented = false;
             }
+            // Append Machine ID
+            $record->machine_code = (int)$this->settings->getSettings()->dpass_rest_code;
             // Get Time
-            $record->create_time = Time::now();
-            $record->update_time = Time::now();
             $record->time = Time::now();
             // Process the photo upload
             $photoPresented = false;
@@ -130,7 +133,6 @@ class RecordsController extends AppController
                // Get a new placeholder for photo
                 $photoTable = $this->Records->Scores->Photos;
                 $photo = $photoTable->newEntity();
-                $photo->create_time = Time::now();
                 // Store photo
                 if ($photoTable->save($photo)){
                     // Store photo information into system
@@ -138,7 +140,6 @@ class RecordsController extends AppController
                     // append the id number into photo filename
                     $photo->photo_path = $link->staff_id."-".$photo->id.".".$photoType[1]; // TODO change to time?
                     // save the photo information again
-                    $photo->update_time = Time::now();
                     $photoTable->save($photo);
                 } else {
                     //TODO Error creating the photo database entry
@@ -154,72 +155,25 @@ class RecordsController extends AppController
             // Save the record
             if ($this->Records->save($record)){
                 // "Calculate" the score
-                // Giving the initial score
-                $score = $this->Records->Scores->newEntity();
-                $score->record_id = $record->id;
-                $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                $score->score = $this->getMark('staff_add_record');
-                $score->notes = "Record is added.";
-                $score->create_time = Time::now();
-                $score->update_time = Time::now();
-                $this->Records->Scores->save($score);
+                // Giving the initial score //TODO see https://trello.com/c/7yiiJ79c
+                $this->giveScore($record,'staff_add_record',"Record is added.");
                 // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
-                    $score = $this->Records->Scores->newEntity();
-                    $score->record_id = $record->id;
-                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                    $score->photos = [$photo];
-                    $score->score = $this->getMark('staff_add_photo');
-                    $score->notes = "Photo is presented.";
-                    $score->create_time = Time::now();
-                    $score->update_time = Time::now();
-                    $this->Records->Scores->save($score);
+                    $this->giveScore($record,'staff_add_photo',"Photo is presented.");
                 }
                 // Giving the location score.
                 if ($locationPresented){
-                    $score = $this->Records->Scores->newEntity();
-                    $score->record_id = $record->id;
-                    $score->manager_id = (int)$this->getSetting('dpass_system_id');
-                    $score->score = $this->getMark('staff_add_location');;
-                    $score->notes = "Location is presented.";
-                    $score->create_time = Time::now();
-                    $score->update_time = Time::now();
-                    $this->Records->Scores->save($score);
+                    $this->giveScore($record,'staff_add_location',"Location is presented.");
                 }
                 // Add to DPass REST
-                if ($this->getSetting('dpass_rest_enabled')==SETTING_ENABLE){
-                    $dpassRest = new Client();
-                    // Prepare the information
-                    $data['id'] = $link->staff_id;
-                    $data['dateTime'] = $record->time->i18nFormat('yyyy-MM-dd HH:mm:ss');
-                    $data['machineId'] = (int)$this->getSetting('dpass_rest_id'); // This must be a number
-                    $data['entryId'] = 0; // Leave them zero
-                    $data['portNumber'] = 0;
-                    $data['ipAddress'] =
-                        $this->request->getEnv('SERVER_ADDR') == '::1' ?
-                        '127.0.0.1' :
-                        $this->request->getEnv('SERVER_ADDR');
-                    $response = $dpassRest->post($this->getSetting('dpass_rest_add_address'),
-                        [
-                            'key' => $this->getSetting('dpass_rest_key'),
-                            'content' => json_encode($data)
-                        ]);
-                    $jsonResponse = json_decode($response->getBody()->getContents());
-                    if (isset($jsonResponse->error)){
-                        $record->additional_data =
-                            'DPASS REST Error in: '. $jsonResponse->error->procedure .';'. $jsonResponse->error->text;
-                    } else {
-                        $record->additional_data = 'DPass REST Transaction id: '.$jsonResponse->transactionId;
-                    }
-                    $record->update_time = Time::now();
-                    $this->Records->save($record);
+                if ($this->settings->getSettings()->dpass_rest_enabled == SETTING_ENABLE){
+                    $this->Records->addRestRecords([$record]);
                 }
                 if (is_null($language)){
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code]);
                 } else {
                     $this->redirect(['controller'=>'Records','action'=>'staffaddCompleted',$code,$language]);
                 }
-
             } else {
                 //TODO Failed to add a record
             }
@@ -229,7 +183,8 @@ class RecordsController extends AppController
         $this->set('staff',$staff);
         $this->set('records',($records));
         $this->set('record',$record);
-        $this->set('recordLimit',(int)$this->getSetting('staffadd_view_limit'));
+        $this->set('recordLimit',(int)$this->settings->getSettings()->staffadd_view_limit);
+        $this->set('waitTime',(int)$this->settings->getSettings()->staffadd_wait_time);
     }
 
     public function staffaddCompleted($code = null, $language = null){
@@ -245,7 +200,7 @@ class RecordsController extends AppController
             ->where(['link' => $code])
             ->firstOrFail();
         // Fetching the latest attendance records
-        $viewLimit = (int)$this->getSetting('staffadd_view_limit') + 1;  // Adding one more to highlight the latest one
+        $viewLimit = (int)$this->settings->getSettings()->staffadd_view_limit + 1;  // Adding one more to highlight the latest one
         $records = $this->Records
             ->find('all')
             ->where(['staff_id'=> $link->staff_id])
@@ -263,6 +218,100 @@ class RecordsController extends AppController
         $this->set('records',($records));
         $this->set('recordLimit',$viewLimit);
     }
+
+    /**
+     * RESTful Record add method
+     *
+     * Records may be added via the RESTful Channel
+     * Pathway to access: ../api/records/add
+     * Data to be transmitted as form data.
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function restAdd(){
+        $this->viewBuilder()->setClassName('Json');
+        if ($this->request->is('post')) {
+            $formData = $this->request->getData();
+            // Check for API key
+            if (array_key_exists('key',$formData) && $this->checkKey($formData['key'])){
+                $content = json_decode($formData['content']);
+                // Record Validation
+                $itemValid = true;
+                $i = 0;
+                foreach ($content as $item){
+                    $record['staff_id'] = $item->id;
+                    $record['http_cf_connecting_ip'] = $item->ipAddress;
+                    $record['machine_code'] = $item->machineId;
+                    // Get Time
+                    $record['time'] = new Time($item->dateTime);
+                    $record['accuracy'] = 100;
+                    $dataCheck = $this->Records->newEntity($record);
+                    $records[] = $dataCheck;
+                    if ($dataCheck->getErrors()){
+                        $itemValid = false;
+                        $errorMessage[$i] = $dataCheck->getErrors();
+                    }
+                    try{ // Staff Id Check
+                        $this->Records->Staff->get($item->id);
+                    } catch (RecordNotFoundException $e){
+                        $itemValid = false;
+                        $errorMessage[$i]['staff_id'] = $item->id . ' is missing from database';
+                    }
+                    $i++;
+                }
+                if ($itemValid) {
+                    // add record accordingly
+                    foreach ($records as $item){
+                        $this->Records->save($item);
+                        // return the record id number
+                        $results[]['transactionId'] = $item->id;
+                    }
+                    // Add to DPass REST
+                    if ($this->settings->getSettings()->dpass_rest_enabled == SETTING_ENABLE){
+                        $this->Records->addRestRecords($records);
+                    }
+                } else {
+                    $errorMessage['error'] = 'One or more of the records are incorrect, or the JSON syntax is wrong';
+                    $this->response = $this->response->withStatus(400);
+                }
+            } else {
+                // API Key is invalid
+                $errorMessage['error'] = $this->keyError;
+            }
+        } else {
+            $errorMessage['error'] = 'Method not allowed';
+            $this->response = $this->response->withStatus(405);
+        }
+        if (isset($errorMessage)){
+            // Error messages to be shown here
+            $this->set('json',json_encode($errorMessage));
+        } else {
+            // The record is processed successfully
+            $this->set('json',json_encode($results));
+        }
+    }
+
+    /**
+     * giveScore method
+     *
+     * Score of a record will be added according to the score name,
+     * the method then fetch the set score value to add into the scores table.
+     *
+     * Note this method resembles the system into a person making the score.
+     *
+     * @param \App\Model\Table\RecordsTable $record
+     * @param String $scoreName
+     * @param String $note
+     */
+    private function giveScore($record, $scoreName, $note){
+        $score = $this->Records->Scores->newEntity();
+        $score->record_id = $record->id;
+        $score->manager_id = (int)$this->settings->getSettings()->manager_id;
+        $score->score = $this->getMark($scoreName);
+        $score->notes = $note;
+        $this->Records->Scores->save($score);
+    }
+
     /**
      * Edit method
      *

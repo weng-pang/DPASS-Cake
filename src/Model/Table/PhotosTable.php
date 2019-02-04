@@ -19,6 +19,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Photo patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Photo[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Photo findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class PhotosTable extends Table
 {
@@ -41,6 +43,14 @@ class PhotosTable extends Table
             'foreignKey' => 'photo_id',
             'targetForeignKey' => 'score_id',
             'joinTable' => 'photos_scores'
+        ]);
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
         ]);
     }
 

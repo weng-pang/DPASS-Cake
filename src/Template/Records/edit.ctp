@@ -9,11 +9,15 @@
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', $record->serial],
+                ['action' => 'delete', $record->id],
                 ['confirm' => __('Are you sure you want to delete # {0}?', $record->id)]
             )
         ?></li>
         <li><?= $this->Html->link(__('List Records'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('List Staff'), ['controller' => 'Staff', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Staff'), ['controller' => 'Staff', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Scores'), ['controller' => 'Scores', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Score'), ['controller' => 'Scores', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="records form large-9 medium-8 columns content">
@@ -21,8 +25,9 @@
     <fieldset>
         <legend><?= __('Edit Record') ?></legend>
         <?php
-            echo $this->Form->control('record_id');
-            echo $this->Form->control('staff_id');
+            echo $this->Form->control('staff_id', ['options' => $staff, 'empty' => true]);
+            echo $this->Form->control('machine_code');
+            echo $this->Form->control('rest_serial');
             echo $this->Form->control('longitude');
             echo $this->Form->control('latitude');
             echo $this->Form->control('accuracy');

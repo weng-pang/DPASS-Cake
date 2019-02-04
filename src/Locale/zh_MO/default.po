@@ -51,6 +51,27 @@ msgstr "成功記錄考勤"
 msgid "Report your attendance again"
 msgstr "再記錄考勤"
 
+msgid "Please Wait"
+msgstr "請等候"
+
+msgid "The setting has been saved."
+msgstr "設定已儲存"
+
+msgid "Still Uploading..."
+msgstr "仍然上傳中..."
+
+msgid "Still Uploading......?"
+msgstr "仍然上傳中......?"
+
+msgid "Retry again"
+msgstr "再嘗試"
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 

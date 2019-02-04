@@ -19,6 +19,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Link patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Link[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Link findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class LinksTable extends Table
 {
@@ -38,6 +40,14 @@ class LinksTable extends Table
         $this->setPrimaryKey('link_id');
 
         $this->belongsTo('Staff');
+        $this->addBehavior('Timestamp',[
+            'events' => [
+                'Model.beforeSave' => [
+                    'create_time' => 'new',
+                    'update_time' => 'always',
+                ],
+            ],
+        ]);
     }
 
     /**

@@ -47,18 +47,25 @@
     </div>
 </div>
 
-
-
-<div id="no-photo-confirm" title="<?=__('Photo is not attached')?>" style="display: none">
+<div id="no-photo-confirm" title="<?=__('Photo is not attached')?>" style="display:none">
     <p><?=__('Photo is not attached. Are you sure to continue?')?></p>
 </div>
-
+<div id="long-loading" style="display:none">
+    <p><?=__('Still Uploading......?')?></p>
+    <a href="#" class="btn btn-info btn-record" onclick="window.location.reload(true);"><?=__('Retry again')?></a>
+</div>
+<?= $this->Html->script('staffadd.modules.min') ?>
 <script>
-    // Get all the relevant elements
-    let latitude = document.getElementById('latitude');
-    let longitude = document.getElementById('longitude');
-    let accuracy = document.getElementById('accuracy');
-    let locationDisplay =  document.getElementById('location-service');
+    let ready = " <?=__('Location is ready for upload')?>";
+    let notSupported = " <?=__('Location Service is not supported by this browser.')?>";
+    let denied = " <?=__('User denied the request for Geolocation.')?>";
+    let unavailable = " <?=__('Location information is unavailable.')?>";
+    let timeout = " <?=__('The request to get user location timed out.')?>";
+    let unknown = " <?=__('An unknown error occurred.')?>:";
+
+    let wait = '<?=__('Please Wait')?>';
+    let loading = "<?=__('Still Uploading...')?>";
+    let waitTime = <?= $waitTime?>;
 
     $( function() {
         $( "#no-photo-confirm" ).dialog({
@@ -77,62 +84,6 @@
             }
         });
     } );
-    function locationSuccess(){
-        locationDisplay.classList.remove('alert-danger');
-        locationDisplay.classList.remove('fa-times-circle');
-        locationDisplay.classList.add('alert-success');
-        locationDisplay.classList.add('fa-check-circle');
-    }
-
-    function locationFail(){
-        locationDisplay.classList.remove('alert-success');
-        locationDisplay.classList.remove('fa-check-circle');
-        locationDisplay.classList.add('alert-danger');
-        locationDisplay.classList.add('fa-times-circle');
-    }
-
-    function getLocation(){
-        if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-
-        } else {
-            // TODO populate the warning message
-            locationDisplay.innerHTML = " <?=__('Location Service is not supported by this browser.')?>";
-            locationFail();
-        }
-    }
-
-    function showPosition(position){
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
-        accuracy.value = position.coords.accuracy;
-        locationDisplay.innerHTML = " <?=__('Location is ready for upload')?>";
-        locationSuccess();
-    }
-
-    function showError(error){
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                locationDisplay.innerHTML = " <?=__('User denied the request for Geolocation.')?>";
-                break;
-            case error.POSITION_UNAVAILABLE:
-                locationDisplay.innerHTML = " <?=__('Location information is unavailable.')?>";
-                break;
-            case error.TIMEOUT:
-                locationDisplay.innerHTML = " <?=__('The request to get user location timed out.')?>";
-                break;
-            default:
-                locationDisplay.innerHTML = " <?=__('An unknown error occurred.')?>:";
-                break;
-        }
-        locationFail();
-    }
-    function checkPhotoUpload(){
-        if (document.getElementById("photo").files.length == 0){
-            $( "#no-photo-confirm" ).dialog( "open" );
-            event.returnValue = false; // Stop the original form submit
-        }
-    }
 
     getLocation();
 </script>

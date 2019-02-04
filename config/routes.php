@@ -70,6 +70,11 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->connect('/reported/:code/:language',['controller'=>'Records','action'=>'staffaddCompleted'])->setPass(['code','language']);
 
     /**
+     * Enforcing CSRF Middleware for general routes
+     */
+    $routes->applyMiddleware('csrf');
+
+    /**
      * Connect catchall routes for all controllers.
      * TODO Remove this one in the future? We will need specific path only.
      * Using the argument `DashedRoute`, the `fallbacks` method is a shortcut for
@@ -86,4 +91,12 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
     $routes->fallbacks(DashedRoute::class);
+});
+/**
+ * Routes for allowing API access
+ *
+ */
+Router::scope('/api', function (RouteBuilder $routes) {
+    $routes->connect('/records/add',['controller'=>'Records','action'=>'restAdd']);
+    $routes->resources('Records');
 });

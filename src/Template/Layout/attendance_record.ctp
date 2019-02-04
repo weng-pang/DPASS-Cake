@@ -24,15 +24,17 @@
     <!-- Custom fonts for this template-->
       <?= $this->Html->css('font-awesome.min') ?>
     <!-- Custom styles for this template-->
-      <?= $this->Html->css('sb-admin-2') ?>
-      <?= $this->Html->css('jquery-ui') ?>
+      <?= $this->Html->css('sb-admin-2.min') ?>
+      <?= $this->Html->css('jquery-ui.min') ?>
       <?= $this->Html->css('attendance_record') ?>
 
       <?= $this->fetch('script') ?>
       <!-- Bootstrap core JavaScript-->
       <?= $this->Html->script('jquery-3.3.1.min') ?>
       <?= $this->Html->script('bootstrap.min') ?>
-      <?= $this->Html->script('jquery-ui') ?>
+      <?= $this->Html->script('jquery-ui.min') ?>
+      <!-- BlockUI screen script-->
+      <?= $this->Html->script('jquery.blockUI.min') ?>
       <script>
           $( document ).ready(function() {
               $( function() {

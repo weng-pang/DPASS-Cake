@@ -17,7 +17,8 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\I18n\I18n;
-
+use Cake\I18n\Time;
+use Cake\Core\Exception\Exception;
 /**
  * Application Controller
  *
@@ -31,6 +32,7 @@ class AppController extends Controller
     protected $settings;
     protected $marks;
     protected $languages;
+    protected $keyError = "The API key is missing"; // This is the default message for key error;
 
     /**
      * Initialization hook method.
@@ -68,7 +70,7 @@ class AppController extends Controller
         $this->marks = $this->loadModel('Marks');
         $this->languages = $this->loadModel('Languages');
         // Use the default language
-        $default = (int)$this->settings->find('all')->where(['keyword' => 'default_language'])->first()['content'];
+        $default = (int)$this->settings->getSettings()->language_id;
         $code = $this->languages->get($default)['code'];
         I18n::setLocale($code); // using the default code
         return parent::beforeFilter($event);
@@ -82,22 +84,10 @@ class AppController extends Controller
      *
      * @param string $language
      */
-    protected function changeLanguage($language){
+    public function changeLanguage($language){
         $code = $this->languages->get($language)['code'];
         I18n::setLocale($code);
         $this->set('language',$language);
-    }
-
-    /**
-     *  Find Setting Method
-     *  The setting from the database is obtained by providing the keyword.
-     *
-     * @param string $keyword
-     * @return string
-     */
-    protected function getSetting($keyword){
-
-        return $this->settings->find('all')->where(['keyword' => $keyword])->first()['content'];
     }
 
     /**
@@ -107,8 +97,53 @@ class AppController extends Controller
      * @param string $keyword
      * @return int
      */
-    protected function getMark($keyword){
+    public function getMark($keyword){
 
         return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
     }
+
+    /**
+     * Check method
+     *
+     * Check if a key is valid in the system
+     * A key is valid only when all conditions are met:
+     *  - it is presented in the system
+     *  - it is not expired
+     *  - it is not revoked
+     *
+     * @param string|null $key Api Key.
+     * @return boolean
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When the key is not found.
+     * @throws KeyInvalidException When the key is invalid.
+     */
+    public function checkKey($key = null)
+    {
+
+        try {
+            $this->loadModel('ApiKeys');
+            $apiKey = $this->ApiKeys->find('all')
+                ->where(['ApiKeys.key'=>$key])
+                ->firstOrFail(); // Throws RecordNotFoundException if no key is found
+            // Check expiry date
+            if (Time::now() > $apiKey->expire)
+            {
+                throw new KeyInvalidException(['reason' => 'Expired']);
+            }
+            // Check revoke status
+            if ($apiKey->revoked){
+                throw new KeyInvalidException(['reason' => 'Revoked']);
+            }
+            $this->keyError = "Key is valid for use";
+            return true;
+        } catch(Exception $e){
+            $this->keyError = $e->getMessage();
+            $this->response = $this->response->withStatus(406);
+            return false;
+        }
+    }
+}
+
+class KeyInvalidException extends Exception
+{
+    protected $_messageTemplate = 'The API Key is %s';
 }
