@@ -19,7 +19,9 @@ class RecordsController extends AppController
      */
     public function index()
     {
-        $records = $this->paginate($this->Records);
+        $records =($this->Records->find('all',[
+            'contain' => ['Staff','Scores']
+        ]));
 
         $this->set(compact('records'));
     }
