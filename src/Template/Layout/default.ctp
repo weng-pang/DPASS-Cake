@@ -26,11 +26,8 @@
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->fetch('script') ?>
-
     <!-- Custom fonts for this template-->
     <?= $this->Html->css('fontawesome/all.min') ?>
-<!--    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
@@ -58,6 +55,8 @@
         </a>
 
         <!-- Divider -->
+        <hr class="sidebar-divider">
+        <?= $this->fetch('sidebar') ?>
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
@@ -351,6 +350,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+                <?= $this->fetch('content') ?>
 
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">Tables</h1>
@@ -912,7 +912,7 @@
 
 <!-- Page level custom scripts -->
 <?= $this->Html->script('default-datatables.min') ?>
-
+<?= $this->fetch('script') ?>
 </body>
 
 </html>
