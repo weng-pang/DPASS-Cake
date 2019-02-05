@@ -31,7 +31,7 @@
       <?= $this->fetch('script') ?>
       <!-- Bootstrap core JavaScript-->
       <?= $this->Html->script('jquery-3.3.1.min') ?>
-      <?= $this->Html->script('bootstrap.min') ?>
+      <?= $this->Html->script('bootstrap-3.3.7.min') ?>
       <?= $this->Html->script('jquery-ui.min') ?>
       <!-- BlockUI screen script-->
       <?= $this->Html->script('jquery.blockUI.min') ?>
