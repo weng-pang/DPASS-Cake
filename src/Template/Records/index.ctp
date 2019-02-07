@@ -21,6 +21,7 @@ $this->start('sidebar'); ?>
                     <tr>
                         <th scope="col"><?= __('Record#') ?></th>
                         <th scope="col"><?= __('Staff') ?></th>
+                        <th scope="col"><?= __('Date') ?></th>
                         <th scope="col"><?= __('Time') ?></th>
                         <th scope="col"><?= __('Score') ?></th>
                         <th scope="col"><?= __('Upload Machine') ?></th>
@@ -43,6 +44,7 @@ $this->start('sidebar'); ?>
                         <tr>
                             <td><?= $this->Number->format($record->id) ?></td>
                             <td><?= $record->has('staff') ? $this->Html->link($record->staff->id, ['controller' => 'Staff', 'action' => 'view', $record->staff->id]) : '' ?></td>
+                            <td><?= (is_null($record->time)) ? '' : $record->time->format('Y-m-d H:i:s') ?></td>
                             <td><?= h($record->time) ?></td>
                             <td><?= $score_display?></td>
                             <td><?= $this->Number->format($record->machine_code) ?></td>
@@ -59,10 +61,77 @@ $this->start('sidebar'); ?>
         </div>
     </div>
 </div>
+<div  style="display: none;">
+    <input id="start-date" value="" />
+    <input id="end-date" value=""  />
+</div>
+
+
 <?php $this->start('script'); ?>
+<!-- Page level plugins -->
+<?= $this->Html->script('jquery.dataTables.min') ?>
+<?= $this->Html->script('dataTables.bootstrap4.min') ?>
 <script>
+    var start = moment().subtract(29, 'days');
+    var end = moment();
     $(document).ready(function() {
-        $('#record-dataTable').DataTable();
+        var theTable = $('#record-dataTable').DataTable({
+            "language": {
+                "search": "",
+                "searchPlaceholder" : "Search records"
+            },
+            "columnDefs": [
+                {
+                    "targets": [ 2 ],
+                    "visible": false,
+                },
+            ],
+            "dom":
+                "<'row datatables_title'<'col-sm-12 col-md-3'l><'toolbar col-sm-12 col-md-3'><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        });
+        $("div.toolbar").html('<div id="reportrange" class="custom-select" style="background: #fff; cursor: pointer; padding: 5px; border: 1px solid #ccc; width: 100%"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;<i class="fa fa-caret-down"></i></div>');
+
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            //TODO Update the table search range
+            $('#start-date').val(start.format('YYYY-MM-DD'));
+            $('#end-date').val(end.format('YYYY-MM-DD'));
+            theTable.draw();
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var min = Date.parse($('#start-date').val());
+                var max = Date.parse($('#end-date').val());
+                var age = Date.parse(data[2]) || 0; // search the date column
+                // Chaning the max value
+                max = max + 86400*1000; // This is one day
+                if ( ( isNaN( min ) && isNaN( max ) ) ||
+                    ( isNaN( min ) && age <= max ) ||
+                    ( min <= age   && isNaN( max ) ) ||
+                    ( min <= age   && age <= max ) )
+                {
+                    return true;
+                }
+                return false;
+            }
+        );
+        cb(start, end);
     });
 </script>
 <?php $this->end(); ?>
