@@ -66,11 +66,11 @@ msgstr "仍然上傳中......?"
 msgid "Retry again"
 msgstr "再嘗試"
 
-msgid ""
-msgstr ""
+msgid "Today"
+msgstr "今日"
 
-msgid ""
-msgstr ""
+msgid "Search records"
+msgstr "搜尋記錄"
 
 msgid ""
 msgstr ""

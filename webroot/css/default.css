@@ -16,6 +16,7 @@ div.dataTables_wrapper div.dataTables_filter input{
     border: 0 !important;
 }
 
-div.row.datatables_title{
+div.row.dataTables_title{
     padding-top: 5px;
+    padding-right: 1px;
 }

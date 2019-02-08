@@ -32,10 +32,9 @@
 
     <!-- Custom styles for this template-->
     <?= $this->Html->css('sb-admin-2.min') ?>
-    <?= $this->Html->css('daterangepicker') ?>
     <?= $this->Html->css('default.min') ?>
     <!-- Custom styles for this page -->
-    <?= $this->Html->css('dataTables.bootstrap4.min') ?>
+    <?= $this->fetch('css') ?>
 
 </head>
 
@@ -413,11 +412,8 @@
 
 <!-- Page level plugins -->
 <?= $this->Html->script('Chart.min') ?>
-<?= $this->Html->script('daterangepicker.moment.min') ?>
-<?= $this->Html->script('daterangepicker') ?>
 
 <!-- Page level custom scripts -->
-<?= $this->Html->script('default-datatables.min') ?>
 <?= $this->fetch('script') ?>
 </body>
 
