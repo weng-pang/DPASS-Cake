@@ -16,7 +16,7 @@ $this->start('sidebar'); ?>
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="record-dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered dataTable" id="record-dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
                         <th scope="col"><?= __('Record#') ?></th>
@@ -64,6 +64,7 @@ $this->start('sidebar'); ?>
 <?php $this->start('css'); ?>
 <?= $this->Html->css('dataTables.bootstrap4.min') ?>
 <?= $this->Html->css('daterangepicker') ?>
+<?= $this->Html->css('DataTablesCell.min') ?>
 <?php
 $this->end();
 $this->start('script'); ?>

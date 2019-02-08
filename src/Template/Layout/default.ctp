@@ -32,7 +32,6 @@
 
     <!-- Custom styles for this template-->
     <?= $this->Html->css('sb-admin-2.min') ?>
-    <?= $this->Html->css('default.min') ?>
     <!-- Custom styles for this page -->
     <?= $this->fetch('css') ?>
 

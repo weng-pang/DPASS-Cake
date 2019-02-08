@@ -20,3 +20,14 @@ div.row.dataTables_title{
     padding-top: 5px;
     padding-right: 1px;
 }
+
+table.dataTable td{
+    vertical-align: middle;
+}
+
+#reportrange{
+    background: #fff;
+    cursor: pointer;
+    padding: 5px;
+    width: 100%
+}
