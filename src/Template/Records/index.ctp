@@ -12,8 +12,10 @@ $this->start('sidebar'); ?>
     <li class="nav-item"><?= $this->Html->link('<span>'.__('New Score').'</span>', ['controller' => 'Scores', 'action' => 'add'],['class' => 'nav-link','escape'=>false]) ?></li>
 <?php $this->end();?>
 <div id="page-wrapper">
-    <h1 class="h3 mb-2 text-gray-800"><?= __('All Records') ?></h1>
     <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><?= __('All Records') ?></h6>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered dataTable" id="record-dataTable" width="100%" cellspacing="0">
@@ -65,8 +67,7 @@ $this->start('sidebar'); ?>
 <?= $this->Html->css('dataTables.bootstrap4.min') ?>
 <?= $this->Html->css('daterangepicker') ?>
 <?= $this->Html->css('DataTablesCell.min') ?>
-<?php
-$this->end();
-$this->start('script'); ?>
+<?php $this->end();?>
+<?php $this->start('script'); ?>
 <?= $this->cell('DataTables',[],['useDatePicker'=>true,'dateControlColumn'=> 2]) ?>
 <?php $this->end(); ?>

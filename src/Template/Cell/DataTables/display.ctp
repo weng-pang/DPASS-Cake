@@ -40,7 +40,7 @@
         });
 
         <?php if ($useDatePicker): ?>
-        $("div.toolbar").html('<div id="reportrange" class="custom-select form-control"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;<i class="fa fa-caret-down"></i></div>');
+        $("div.toolbar").html('<div id="reportrange" class="custom-select form-control p-1"><i class="fa fa-calendar"></i>&nbsp;<span></span>&nbsp;<i class="fa fa-caret-down"></i></div>');
 
         function cb(start, end) {
             $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
