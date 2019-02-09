@@ -3,115 +3,216 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Record $record
  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Record'), ['action' => 'edit', $record->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Record'), ['action' => 'delete', $record->id], ['confirm' => __('Are you sure you want to delete # {0}?', $record->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Records'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Record'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Staff'), ['controller' => 'Staff', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Staff'), ['controller' => 'Staff', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Scores'), ['controller' => 'Scores', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Score'), ['controller' => 'Scores', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="records view large-9 medium-8 columns content">
-    <h3><?= h($record->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Staff') ?></th>
-            <td><?= $record->has('staff') ? $this->Html->link($record->staff->id, ['controller' => 'Staff', 'action' => 'view', $record->staff->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Additional Data') ?></th>
-            <td><?= h($record->additional_data) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Http User Agent') ?></th>
-            <td><?= h($record->http_user_agent) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Http Cf Ray') ?></th>
-            <td><?= h($record->http_cf_ray) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Http Cf Connecting Ip') ?></th>
-            <td><?= h($record->http_cf_connecting_ip) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Http Cookie') ?></th>
-            <td><?= h($record->http_cookie) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($record->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Machine Code') ?></th>
-            <td><?= $this->Number->format($record->machine_code) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Rest Serial') ?></th>
-            <td><?= $this->Number->format($record->rest_serial) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Longitude') ?></th>
-            <td><?= $this->Number->format($record->longitude) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Latitude') ?></th>
-            <td><?= $this->Number->format($record->latitude) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Accuracy') ?></th>
-            <td><?= $this->Number->format($record->accuracy) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Time') ?></th>
-            <td><?= h($record->time) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Create Time') ?></th>
-            <td><?= h($record->create_time) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Update Time') ?></th>
-            <td><?= h($record->update_time) ?></td>
-        </tr>
-    </table>
-    <div class="related">
-        <h4><?= __('Related Scores') ?></h4>
-        <?php if (!empty($record->scores)): ?>
-        <table cellpadding="0" cellspacing="0">
+$this->start('sidebar'); ?>
+    <div class="sidebar-heading"><?= __('Actions') ?></div>
+    <li class="nav-item"><?= $this->Html->link('<i class="fas fa-fw fa-table"></i><span>'.__('List All Records').'</span>', ['action' => 'index'],['class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Form->postLink('<span>'.__('Delete Record').'</span>', ['action' => 'delete', $record->id], ['confirm' => __('Are you sure you want to delete # {0}?', $record->id) ,'class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Html->link('<span>'.__('New Record').'</span>', ['action' => 'add'],['class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Html->link('<span>'.__('List Staff').'</span>', ['controller' => 'Staff', 'action' => 'index'],['class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Html->link('<span>'.__('New Staff').'</span>', ['controller' => 'Staff', 'action' => 'add'],['class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Html->link('<span>'.__('List Scores').'</span>', ['controller' => 'Scores', 'action' => 'index'],['class' => 'nav-link','escape'=>false]) ?> </li>
+    <li class="nav-item"><?= $this->Html->link('<span>'.__('New Score').'</span>', ['controller' => 'Scores', 'action' => 'add'],['class' => 'nav-link','escape'=>false]) ?> </li>
+<?php $this->end();?>
+<?php $this->start('scores');
+    $totalScore = 0; // Set the zero score first
+    if (!empty($record->scores)): ?>
+        <table class="table table-striped dataTable" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Record Id') ?></th>
                 <th scope="col"><?= __('Manager Id') ?></th>
                 <th scope="col"><?= __('Score') ?></th>
                 <th scope="col"><?= __('Notes') ?></th>
-                <th scope="col"><?= __('Create Time') ?></th>
                 <th scope="col"><?= __('Update Time') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($record->scores as $scores): ?>
-            <tr>
-                <td><?= h($scores->id) ?></td>
-                <td><?= h($scores->record_id) ?></td>
-                <td><?= h($scores->manager_id) ?></td>
-                <td><?= h($scores->score) ?></td>
-                <td><?= h($scores->notes) ?></td>
-                <td><?= h($scores->create_time) ?></td>
-                <td><?= h($scores->update_time) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Scores', 'action' => 'view', $scores->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Scores', 'action' => 'edit', $scores->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Scores', 'action' => 'delete', $scores->id], ['confirm' => __('Are you sure you want to delete # {0}?', $scores->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
+                <tr>
+                    <td><?= h($scores->manager_id) ?></td>
+                    <td><?= h($scores->score) ?></td>
+                    <td><?= h($scores->notes) ?></td>
+                    <td><?= h($scores->update_time) ?></td>
+                </tr>
+            <?php $totalScore += $scores->score;
+            endforeach; ?>
         </table>
-        <?php endif; ?>
+    <?php endif; ?>
+<?php $this->end(); ?>
+<div id="page-wrapper">
+    <!-- reserved for flash message -->
+    <div class="row">
+
+    </div>
+    <div class="row">
+        <!-- Staff Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><?= __('Staff') ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $record->has('staff') ? $this->Html->link($record->staff->id.' '. $record->staff->surname. ' '. $record->staff->given_names, ['controller' => 'Staff', 'action' => 'view', $record->staff->id],[]) : '' ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Time Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1"><?= __('Time') ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= h($record->time) ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><?= __('Machine Code') ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->Number->format($record->machine_code) ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <?php $scoreStatus =  ($totalScore >= $marks->pass_mark) ? 'success' : 'info' ?>
+            <div class="card border-left-<?= $scoreStatus ?> shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-<?= $scoreStatus ?> text-uppercase mb-1"><?= __('Score') ?></div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $totalScore ?></div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-<?= $scoreStatus ?>" role="progressbar" style="width: <?= $totalScore*100/$marks->pass_mark ?>%" aria-valuenow="<?= $totalScore ?>" aria-valuemin="0" aria-valuemax="<?= $marks->pass_mark ?>"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- map -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><?= __('Map ') ?></h6>
+                </div>
+                <div class="card-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+            <!-- score table -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><?= __('Approvals') ?></h6>
+                </div>
+                <div class="card-body">
+                    <?= $this->fetch('scores') ?>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <!-- photos -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><?= __('Photos ')  ?></h6>
+                </div>
+
+            </div>
+            <!-- additional information -->
+            <div class="card shadow-lg mb-4">
+                <a href="#additional-information" class="d-block card-header py-3" data-toggle="collapse" role="button" >
+                    <h6 class="m-0 font-weight-bold text-primary"><?= __('Additional Information') ?></h6>
+                </a>
+                <div class="collapse show" id="additional-information">
+                    <div class="card-body">
+                        <div><?= h($record->additional_data) ?></div>
+                        <table class="table table-condensed table-hover dataTable" style="width: 100%; table-layout: fixed;">
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Http User Agent') ?></th>
+                                <td class="p-1"><?= h($record->http_user_agent) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('CF Ray') ?></th>
+                                <td class="p-1"><?= h($record->http_cf_ray) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Connecting Ip') ?></th>
+                                <td class="p-1"><?= h($record->http_cf_connecting_ip) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Cookie') ?></th>
+                                <td class="p-1"><?= h($record->http_cookie) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Machine Code') ?></th>
+                                <td class="p-1"><?= $this->Number->format($record->machine_code) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Rest Serial') ?></th>
+                                <td class="p-1"><?= $record->rest_serial ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Longitude') ?></th>
+                                <td class="p-1"><?= $record->longitude ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Latitude') ?></th>
+                                <td class="p-1"><?= $record->latitude ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Accuracy') ?></th>
+                                <td class="p-1"><?= $this->Number->format($record->accuracy) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Create Time') ?></th>
+                                <td class="p-1"><?= h($record->create_time) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="p-1"><?= __('Update Time') ?></th>
+                                <td class="p-1"><?= h($record->update_time) ?></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<?php $this->start('css'); ?>
+<?= $this->Html->css('dataTables.bootstrap4.min') ?>
+<?= $this->Html->css('daterangepicker') ?>
+<?= $this->Html->css('DataTablesCell.min') ?>
+<?php $this->end();?>

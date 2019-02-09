@@ -5,6 +5,7 @@
  */
 $this->start('sidebar'); ?>
     <div class="sidebar-heading"><?= __('Actions') ?></div>
+    <li class="nav-item active"><?= $this->Html->link('<i class="fas fa-fw fa-table"></i><span>'.__('List All Records').'</span>', ['action' => 'index'],['class' => 'nav-link','escape'=>false]) ?> </li>
     <li class="nav-item"><?= $this->Html->link('<i class="fas fa-fw fa-folder"></i><span>'.__('New Record').'</span>', ['action' => 'add'],['class' => 'nav-link','escape'=>false]) ?></li>
     <li class="nav-item"><?= $this->Html->link('<span>'.__('List Staff').'</span>', ['controller' => 'Staff', 'action' => 'index'],['class' => 'nav-link','escape'=>false]) ?></li>
     <li class="nav-item"><?= $this->Html->link('<span>'.__('New Staff').'</span>', ['controller' => 'Staff', 'action' => 'add'],['class' => 'nav-link','escape'=>false]) ?></li>
