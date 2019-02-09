@@ -162,7 +162,10 @@ class RecordsController extends AppController
                 $this->giveScore($record,'staff_add_record',"Record is added.");
                 // Giving the photo score, note this is a second one, not repeating.
                 if ($photoPresented){
-                    $this->giveScore($record,'staff_add_photo',"Photo is presented.");
+                    $theScore = $this->giveScore($record,'staff_add_photo',"Photo is presented.");
+                    // Establish a link between the Photo and the Score
+                    $photo->scores = [$theScore];
+                    $photoTable->save($photo);
                 }
                 // Giving the location score.
                 if ($locationPresented){
@@ -305,6 +308,7 @@ class RecordsController extends AppController
      * @param \App\Model\Table\RecordsTable $record
      * @param String $scoreName
      * @param String $note
+     * @return \App\Model\Table\ScoresTable $score
      */
     private function giveScore($record, $scoreName, $note){
         $score = $this->Records->Scores->newEntity();
@@ -313,6 +317,7 @@ class RecordsController extends AppController
         $score->score = $this->marks->getMarks()->$scoreName;
         $score->notes = $note;
         $this->Records->Scores->save($score);
+        return $score;
     }
 
     /**
