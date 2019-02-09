@@ -100,7 +100,7 @@ class MarksTable extends Table
     /**
      * Find Marks Method
      * The Marks from the database is obtained.
-     * The first enabled Settings set to be returned
+     * The first enabled Marks set to be returned
      *
      * @return array|\Cake\Datasource\EntityInterface|null
      */

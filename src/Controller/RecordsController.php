@@ -36,10 +36,11 @@ class RecordsController extends AppController
     public function view($id = null)
     {
         $record = $this->Records->get($id, [
-            'contain' => []
+            'contain' => ['Staff','Scores']
         ]);
 
         $this->set('record', $record);
+        $this->set('marks', $this->marks->getMarks());
     }
 
     /**
@@ -309,7 +310,7 @@ class RecordsController extends AppController
         $score = $this->Records->Scores->newEntity();
         $score->record_id = $record->id;
         $score->manager_id = (int)$this->settings->getSettings()->manager_id;
-        $score->score = $this->getMark($scoreName);
+        $score->score = $this->marks->getMarks()->$scoreName;
         $score->notes = $note;
         $this->Records->Scores->save($score);
     }

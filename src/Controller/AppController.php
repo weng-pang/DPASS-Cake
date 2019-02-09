@@ -90,17 +90,6 @@ class AppController extends Controller
         $this->set('language',$language);
     }
 
-    /**
-     *  Find Mark Method
-     *  The mark from the database is obtained by providing the keyword.
-     *
-     * @param string $keyword
-     * @return int
-     */
-    public function getMark($keyword){
-
-        return (int)$this->marks->find('all')->where(['keyword' => $keyword])->first()['mark'];
-    }
 
     /**
      * Check method
