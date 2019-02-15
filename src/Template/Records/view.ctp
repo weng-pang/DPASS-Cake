@@ -126,7 +126,7 @@ $this->start('sidebar'); ?>
                 <div class="card-header">
                     <h6 class="m-0 font-weight-bold text-primary"><?= __('Map ') ?></h6>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="height:300px;">
                     <div id="map"></div>
                 </div>
             </div>
@@ -137,8 +137,6 @@ $this->start('sidebar'); ?>
                 </div>
                 <div class="card-body">
                     <?= $this->fetch('scores') ?>
-
-
                 </div>
             </div>
         </div>
@@ -148,7 +146,11 @@ $this->start('sidebar'); ?>
                 <div class="card-header">
                     <h6 class="m-0 font-weight-bold text-primary"><?= __('Photos ')  ?></h6>
                 </div>
-
+                <div class="card-body">
+                    <?php foreach ($scoresWithPhotos as $score) : ?>
+                        <?php debug($score); ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
             <!-- additional information -->
             <div class="card shadow-lg mb-4">
@@ -215,4 +217,23 @@ $this->start('sidebar'); ?>
 <?= $this->Html->css('dataTables.bootstrap4.min') ?>
 <?= $this->Html->css('daterangepicker') ?>
 <?= $this->Html->css('DataTablesCell.min') ?>
+<?= $this->Html->css('https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css') ?>
+<style>
+    #map { position:absolute; top:3rem; bottom:0.5rem; width:90%; }
+</style>
+<?php $this->end();?>
+<?php $this->start('script'); ?>
+<?= $this->Html->script('https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js') ?>
+<script>
+    L.mapbox.accessToken = '<?= $mapbox['accessToken'] ?>';
+    var map = L.mapbox.map('map', 'mapbox.streets')
+        .setView([<?= $record->latitude ?>, <?= $record->longitude ?>], 15);
+    // Add marker here
+    L.marker([<?= $record->latitude ?>, <?= $record->longitude ?>], {
+        icon: L.mapbox.marker.icon({
+            'marker-size': 'medium',
+            'marker-color': '#fa0'
+        })
+    }).addTo(map);
+</script>
 <?php $this->end();?>

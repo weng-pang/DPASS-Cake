@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Photos Controller
@@ -16,18 +17,25 @@ class PhotosController extends AppController
     /**
      * View method
      * Photos will be shown directly from this method
+     * A record must be viewed first before accessing any photos
      *
      * @param string|null $id Photo id.
      * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When photo not found or access directly.
      */
     public function view($id = null)
     {
-        $photo = $this->Photos->get($id, [
-            'contain' => ['Scores']
-        ]);
+        $photo = $this->Photos->get($id,['contain' => 'scores']);
+        $photosList = $this->getRequest()->getSession()->read('photosList');
 
-        $this->set('photo', $photo);
+        // Check if the image is accessible, according to the record accessed
+        if (is_null($photosList) || !array_key_exists($id, $photosList)) {
+            throw new RecordNotFoundException('This photo cannot be accessed directly',401);
+        }
+        // Fetch the image
+        $thePhoto = $this->response->withFile(PHOTOS_DIR . $photo->photo_path);
+        // Display the image out directly
+        return $thePhoto;
     }
 
     /**

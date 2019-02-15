@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use Cake\I18n\Time;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Core\Configure;
+
 /**
  * Records Controller
  *
@@ -35,12 +37,30 @@ class RecordsController extends AppController
      */
     public function view($id = null)
     {
+        $this->Records->recursive =
         $record = $this->Records->get($id, [
-            'contain' => ['Staff','Scores']
+            'contain' => ['Staff','Scores'],
         ]);
+        // Add the Photo access list
+        $scoresWithPhotos = $this->Records->Scores->find('all',[
+                'conditions' => ['Record_id' => $id],
+            ]
+        )->contain(['Photos']);
 
+        $session = $this->getRequest()->getSession();
+        // Generate a photo file list
+        $photosList = array();
+        foreach ($scoresWithPhotos as $score){
+            foreach ($score->photos as $photo){
+                $photosList [$photo->id] = $photo->photo_path;
+            }
+        }
+        // Load the photo list into session
+        $session->write('photosList',$photosList);
         $this->set('record', $record);
         $this->set('marks', $this->marks->getMarks());
+        $this->set('mapbox', Configure::read('Mapbox'));
+        $this->set('scoresWithPhotos',$scoresWithPhotos);
     }
 
     /**

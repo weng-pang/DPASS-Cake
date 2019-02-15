@@ -255,7 +255,7 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => 'dpass-cake',
-            'password' => 'PLEASE CHANGE ME',
+            'password' => 'PLEASE CHANGE ME', //TODO PLEASE CHANGE ME
             'database' => 'dpass-cake-dev',
             /*
              * Backup schema file setting
@@ -388,5 +388,14 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+    ],
+    /**
+     * Mapbox Configuration
+     *
+     * Mapbox is the tool to display maps on this system.
+     * To use Mapbox in DPASS, an access token must be obtained and applied here.
+     */
+    'Mapbox' => [
+        'accessToken' => 'PLEASE CHANGE ME', //TODO PLEASE CHANGE ME
     ],
 ];
