@@ -147,7 +147,7 @@ class RecordsController extends AppController
                 } else {
                     //TODO Error creating the photo database entry
                 }
-                if (!move_uploaded_file($postData['photo']['tmp_name'],ROOT . DS . 'photos'. DS . $photo->photo_path)){
+                if (!move_uploaded_file($postData['photo']['tmp_name'],PHOTOS_DIR . $photo->photo_path)){
                     // TODO Error moving the photo
                 } else {
                     $photoPresented = true;

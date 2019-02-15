@@ -93,3 +93,8 @@ define('CAKE', CORE_PATH . 'src' . DS);
  * Path to the backup / installation schema directory
  */
 define('BACKUP_SCHEMA_DIR', CONFIG . 'schema' . DS . 'backup' . DS);
+
+/**
+ * Path to the photo storage directory
+ */
+define('PHOTOS_DIR', ROOT . DS . 'photos'. DS);
